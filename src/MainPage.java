@@ -30,6 +30,10 @@ public class MainPage extends JPanel {
 			display.add("West", image);
 			String userName = client.getUserName(curTalked);
 			String lastSentence = client.getConversation(client.getCurUser(), curTalked, 0);
+			if (lastSentence.startsWith("0"))
+				lastSentence = "Me : " + lastSentence.substring(1);
+			else
+				lastSentence = userName + " : " + lastSentence.substring(1);
 			JLabel nameLabel = new JLabel(userName);
 			nameLabel.setFont(new Font("Dialog", 1, 15));
 			JPanel centerPanel = new JPanel(new GridLayout(2, 1));
