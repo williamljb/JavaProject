@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.filechooser.*;
 
 import java.awt.*;
@@ -47,7 +46,7 @@ public class RegisterPage extends JPanel {
 		conPanel.add(passConfirm);
 		//upload
 		upload = new JButton("Upload Image...");
-		image = new JLabel(new ImageIcon(client.getDefaultUserIcon().
+		image = new JLabel(new ImageIcon(Client.getDefaultUserIcon().
 				getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 		upload.addActionListener(new ActionListener(){
 

@@ -20,9 +20,10 @@ public class LoginPage extends JPanel{
 		this.client = client0;
 		this.setLayout(new GridLayout(2, 1));
 		this.setSize(300, 300);
-		this.setLocation((client.ui.WIDTH - 300) / 2, (client.ui.HEIGHT - 300) / 3);
+		this.setLocation((UIDisplay.WIDTH - 300) / 2, (UIDisplay.HEIGHT - 300) / 3);
 		//icon
-		icon = new JLabel(client.getLastUserIcon());
+		icon = new JLabel(new ImageIcon(client.getLastUserIcon().
+				getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 		JPanel iconPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		iconPanel.add(icon);
 		//id
@@ -34,15 +35,15 @@ public class LoginPage extends JPanel{
 
 			@Override
 			public void changedUpdate(DocumentEvent arg0) {
-				icon.setIcon(client.getDefaultUserIcon());
+				icon.setIcon(Client.getDefaultUserIcon());
 			}
 			@Override
 			public void insertUpdate(DocumentEvent arg0) {
-				icon.setIcon(client.getDefaultUserIcon());
+				icon.setIcon(Client.getDefaultUserIcon());
 			}
 			@Override
 			public void removeUpdate(DocumentEvent arg0) {
-				icon.setIcon(client.getDefaultUserIcon());
+				icon.setIcon(Client.getDefaultUserIcon());
 			}
 		});
 		//pass
