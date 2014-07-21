@@ -49,8 +49,9 @@ public class Client {
 		return 20;
 	}
 
-	public User getUserTalked(int i) {
+	public User getUserTalked(int order) {
 		// TODO Auto-generated method stub
+		//get the last order-th user that talked with current user
 		return new User();
 	}
 
@@ -74,5 +75,22 @@ public class Client {
 		//returns the last order-th sentence that User me and friend had talked
 		//if the required sentence is spoken by me, add a zero in the front, else add a one
 		return "0I am speaking";
+	}
+
+	public String getPasswordOfUser(User curUser) {
+		// TODO Auto-generated method stub
+		return "";
+	}
+
+	public int editAccount(String id, String newName, String newPassword, ImageIcon newImage) {
+		// TODO Auto-generated method stub
+		//0 for ServerNotFound, 1 for ID exists, -1 for succeed
+		System.out.println(newPassword);
+		return -1;
+	}
+
+	public String getUserID(User curUser) {
+		// TODO Auto-generated method stub
+		return "";
 	}
 }

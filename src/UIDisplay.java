@@ -3,13 +3,17 @@ import javax.swing.*;
 public class UIDisplay {
 	public static final int WIDTH = 440;
 	public static final int HEIGHT = 720;
+	JPanel stack[] = new JPanel[10];
+	int top = 0;
+	int cnt = 0;
 	JFrame mainFrame;
 	Client client;
 	LoginPage login;
 	MainPage mainPage;
 	RegisterPage registerPage;
-	JPanel stack[] = new JPanel[10];
-	int top = 0;
+	FriendPage friendPage;
+	DiscoverPage discoverPage;
+	MyPage myPage;
 	
 	public UIDisplay(Client client) {
 		this.client = client;
@@ -31,6 +35,9 @@ public class UIDisplay {
 		this.mainFrame.setSize(WIDTH, HEIGHT);
 		this.mainFrame.setVisible(true);
 		this.mainFrame.repaint();
+		++cnt;
+		if (cnt % 10 == 0)
+			System.gc();
 	}
 
 	private void push(JPanel panel) {stack[top++] = panel;}

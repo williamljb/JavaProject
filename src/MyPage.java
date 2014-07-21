@@ -1,11 +1,11 @@
-import javax.swing.*;
-import javax.swing.filechooser.*;
-
 import java.awt.*;
 import java.awt.event.*;
 
+import javax.swing.*;
+import javax.swing.filechooser.*;
 
-public class RegisterPage extends JPanel {
+
+public class MyPage extends JPanel {
 	/**
 	 * 
 	 */
@@ -17,20 +17,21 @@ public class RegisterPage extends JPanel {
 	JButton upload, register;
 	JLabel title, image;
 
-	public RegisterPage(Client cli) {
+	public MyPage(Client cli) {
 		client = cli;
 		//register label
-		title = new JLabel("Register");
+		title = new JLabel("Edit Personal Info");
 		title.setFont(new Font("Dialog", 1, 20));
 		JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		titlePanel.add(title);
 		//id field
-		id = new JTextField(15);
+		id = new JTextField(client.getUserID(client.getCurUser()), 15);
 		JPanel idPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		idPanel.add(new JLabel("User ID:"));
 		idPanel.add(id);
+		id.setEditable(false);
 		//name field
-		name = new JTextField(15);
+		name = new JTextField(client.getUserName(client.getCurUser()), 15);
 		JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		namePanel.add(new JLabel("User Name:"));
 		namePanel.add(name);
@@ -65,18 +66,13 @@ public class RegisterPage extends JPanel {
 			
 		});;
 		//register
-		register = new JButton("Register");
+		register = new JButton("Confirm");
+		register.setPreferredSize(new Dimension(100, 20));
 		register.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String info = "";
-				if (id.getText().equals(""))
-				{
-					info = "ID should not be empty!";
-					JOptionPane.showMessageDialog(client.ui.mainFrame, info, "Error", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
 				if (name.getText().equals(""))
 				{
 					info = "Name should not be empty!";
@@ -89,7 +85,9 @@ public class RegisterPage extends JPanel {
 					JOptionPane.showMessageDialog(client.ui.mainFrame, info, "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				int ret = client.createNewAccount(id.getText(), name.getText(), 
+				if (String.valueOf(password.getPassword()).equals(""))
+					password.setText(client.getPasswordOfUser(client.getCurUser()));
+				int ret = client.editAccount(id.getText(), name.getText(), 
 						String.valueOf(password.getPassword()), (ImageIcon)image.getIcon());
 				switch (ret)
 				{
@@ -101,11 +99,13 @@ public class RegisterPage extends JPanel {
 					JOptionPane.showMessageDialog(client.ui.mainFrame, info, "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				client.tryLogin(id.getText(), String.valueOf(password.getPassword()));
+				JOptionPane.showMessageDialog(client.ui.mainFrame, "Succeed!", "Info", JOptionPane.INFORMATION_MESSAGE);
 				client.ui.setPage(client.ui.mainPage = new MainPage(client));
 			}
 			
 		});
+		//Buttons
+		MenuButton menu = new MenuButton(client, 3);
 		//join together
 		JPanel infoPanel = new JPanel(new GridLayout(5, 1));
 		infoPanel.add(titlePanel);
@@ -113,17 +113,20 @@ public class RegisterPage extends JPanel {
 		infoPanel.add(namePanel);
 		infoPanel.add(passPanel);
 		infoPanel.add(conPanel);
-		JPanel buttonPanel = new JPanel(new FlowLayout()), imagePanel = new JPanel(new FlowLayout());
+		JPanel buttonPanel = new JPanel(new GridLayout(2, 1)), imagePanel = new JPanel(new FlowLayout());
 		imagePanel.add(image);
 		imagePanel.add(upload);
 		buttonPanel.add(imagePanel);
 		buttonPanel.add(register);
-		this.setLayout(new GridLayout(2, 1));
-		this.add(infoPanel);
-		this.add(buttonPanel);
-		this.setSize(350, 500);
-		this.setLocation((UIDisplay.WIDTH - 350) / 2, (UIDisplay.HEIGHT - 300) / 3);
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.add("Center", infoPanel);
+		mainPanel.add("South", buttonPanel);
+		mainPanel.setPreferredSize(new Dimension(350, UIDisplay.HEIGHT - 150));
+
+		this.add("Center", mainPanel);
+		this.add("South", menu);
 		this.setVisible(true);
+		this.setSize(new Dimension(UIDisplay.WIDTH, UIDisplay.HEIGHT));
 	}
 
 }
