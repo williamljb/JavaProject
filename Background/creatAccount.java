@@ -12,7 +12,8 @@ public class creatAccount {
 	private String nickname = null;
 	private ImageIcon profilepicture = null;*/
 	
-	private int writeData(String ID, String password, String nickname, ImageIcon picture){
+	//Server establish users Info
+	int writeData(String ID, String password, String nickname, ImageIcon picture){
 		
 	
 		int flag = 0;
@@ -143,8 +144,4 @@ String searchdata(String ID){
 	return null;
 	
     }
-}
-
-class data{
-	
 }
