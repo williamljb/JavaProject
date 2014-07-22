@@ -89,7 +89,7 @@ public class Client {
 
 	public String getUserID(User curUser) {
 		// TODO Auto-generated method stub
-		return "";
+		return "heyhey";
 	}
 
 	public int getNumberOfFriends() {
@@ -104,6 +104,41 @@ public class Client {
 	}
 
 	public void sendFriendRequestTo(String userID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public int getNumberOfRequest() {
+		// TODO Auto-generated method stub
+		return 10;
+	}
+
+	public User getUserOfRequest(int i) {
+		// TODO Auto-generated method stub
+		return new User();
+	}
+
+	public void acceptRequestWith(String userID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public User getKthFriend(int i) {
+		// TODO Auto-generated method stub
+		return new User();
+	}
+
+	public User getUserById(String userID) {
+		// TODO Auto-generated method stub
+		return new User();
+	}
+
+	public boolean isFriend(String userID) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void deleteFriend(String userID) {
 		// TODO Auto-generated method stub
 		
 	}

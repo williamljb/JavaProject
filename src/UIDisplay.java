@@ -17,6 +17,7 @@ public class UIDisplay {
 	FriendAddPage friendAddPage;
 	SeeRequestPage seeRequestPage;
 	UserPage userPage;
+	TalkPage talkPage;
 	
 	public UIDisplay(Client client) {
 		this.client = client;
@@ -50,10 +51,14 @@ public class UIDisplay {
 	void push(JPanel panel) {
 		this.mainFrame.remove(stack[top - 1]);
 		stack[top++] = panel;
+		if (stack[top - 1] instanceof FriendPage)
+			stack[top - 1] = new FriendPage(client);
 		displayPage(panel);
 	}
 	void pop() {
 		this.mainFrame.remove(stack[top - 1]);
+		if (stack[top - 2] instanceof FriendPage)
+			stack[top - 2] = new FriendPage(client);
 		displayPage(stack[top - 2]);
 		--top;
 	}

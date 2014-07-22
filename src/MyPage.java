@@ -104,6 +104,18 @@ public class MyPage extends JPanel {
 			}
 			
 		});
+		JButton logout = new JButton("Logout");
+		JPanel buttonPane = new JPanel(new GridLayout(2, 1));
+		buttonPane.add(register);
+		buttonPane.add(logout);
+		logout.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				client.ui.setPage(client.ui.login = new LoginPage(client));
+			}
+			
+		});
 		//Buttons
 		MenuButton menu = new MenuButton(client, 3);
 		//join together
@@ -117,7 +129,7 @@ public class MyPage extends JPanel {
 		imagePanel.add(image);
 		imagePanel.add(upload);
 		buttonPanel.add(imagePanel);
-		buttonPanel.add(register);
+		buttonPanel.add(buttonPane);
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		mainPanel.add("Center", infoPanel);
 		mainPanel.add("South", buttonPanel);

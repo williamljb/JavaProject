@@ -58,13 +58,15 @@ public class FriendPage extends JPanel {
 				JLabel image = new JLabel(new ImageIcon(client.getUserIcon(client.getCurUser()).getImage()
 						.getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 				display.add("West", image);
-				JLabel name = new JLabel(client.getUserName(client.getCurUser()));
+				final User curFriend = client.getKthFriend(i);
+				JLabel name = new JLabel(client.getUserName(curFriend));
 				name.setFont(new Font("Dialog", 1, 20));
 				display.add("Center", name);
 				display.addMouseListener(new MouseListener(){
 
 					@Override
 					public void mouseClicked(MouseEvent arg0) {
+						client.ui.push(client.ui.userPage = new UserPage(client, client.getUserID(curFriend)));
 					}
 
 					@Override

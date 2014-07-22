@@ -23,7 +23,7 @@ public class MainPage extends JPanel {
 		{
 			JPanel display = new JPanel(new BorderLayout());
 			display.setSize(UIDisplay.WIDTH, (UIDisplay.HEIGHT - 150) / 6);
-			User curTalked = client.getUserTalked(i);
+			final User curTalked = client.getUserTalked(i);
 			JLabel image = new JLabel(new ImageIcon(client.getUserIcon(curTalked).
 					getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 			display.add("West", image);
@@ -44,7 +44,7 @@ public class MainPage extends JPanel {
 
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					//TODO
+					client.ui.push(client.ui.talkPage = new TalkPage(client, client.getUserID(curTalked)));
 				}
 
 				@Override

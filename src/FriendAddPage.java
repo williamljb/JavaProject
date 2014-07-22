@@ -29,7 +29,7 @@ public class FriendAddPage extends JPanel {
 		inputPanel.add(inputID);
 		//button
 		JPanel buttonPanel = new JPanel(new GridLayout(1, 3));
-		checkAndAdd = new JButton("Check and Add");
+		checkAndAdd = new JButton("Check Profile");
 		back = new JButton("Back");
 		seeRequest = new JButton("See Request");
 		buttonPanel.add(checkAndAdd);
@@ -55,7 +55,7 @@ public class FriendAddPage extends JPanel {
 				{
 					//client.sendFriendRequestTo(inputID.getText());
 					client.ui.push(client.ui.userPage = new UserPage(client, inputID.getText()));
-					JOptionPane.showMessageDialog(client.ui.mainFrame, info, "info", JOptionPane.INFORMATION_MESSAGE);
+					//JOptionPane.showMessageDialog(client.ui.mainFrame, info, "info", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 			}
