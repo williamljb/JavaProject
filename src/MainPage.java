@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.event.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -38,7 +37,7 @@ public class MainPage extends JPanel {
 			nameLabel.setFont(new Font("Dialog", 1, 15));
 			JPanel centerPanel = new JPanel(new GridLayout(2, 1));
 			centerPanel.add(nameLabel);
-			centerPanel.add(new JLabel(lastSentence + ""));
+			centerPanel.add(new JLabel(lastSentence));
 			display.add("Center", centerPanel);
 			mainScreen.add(display);
 			display.addMouseListener(new MouseListener(){

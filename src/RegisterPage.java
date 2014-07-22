@@ -63,7 +63,7 @@ public class RegisterPage extends JPanel {
 				client.ui.stack[0].repaint();
 			}
 			
-		});;
+		});
 		//register
 		register = new JButton("Register");
 		register.addActionListener(new ActionListener(){

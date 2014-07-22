@@ -1,5 +1,3 @@
-import java.awt.*;
-
 import javax.swing.*;
 
 
@@ -92,5 +90,21 @@ public class Client {
 	public String getUserID(User curUser) {
 		// TODO Auto-generated method stub
 		return "";
+	}
+
+	public int getNumberOfFriends() {
+		// TODO Auto-generated method stub
+		return 10;
+	}
+
+	public int findUserID(String userID) {
+		// TODO Auto-generated method stub
+		//0 for ServerNotFound, 1 for NoSuchID, -1 for succeed
+		return -1;
+	}
+
+	public void sendFriendRequestTo(String userID) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -14,6 +14,9 @@ public class UIDisplay {
 	FriendPage friendPage;
 	DiscoverPage discoverPage;
 	MyPage myPage;
+	FriendAddPage friendAddPage;
+	SeeRequestPage seeRequestPage;
+	UserPage userPage;
 	
 	public UIDisplay(Client client) {
 		this.client = client;
@@ -30,17 +33,29 @@ public class UIDisplay {
 			this.mainFrame.remove(stack[--top]);
 		stack[top = 0] = page;
 		top++;
+		displayPage(page);
+	}
+
+	private void displayPage(JPanel page) {
 		this.mainFrame.setLayout(null);
 		this.mainFrame.add(page);
 		this.mainFrame.setSize(WIDTH, HEIGHT);
 		this.mainFrame.setVisible(true);
 		this.mainFrame.repaint();
 		++cnt;
-		if (cnt % 10 == 0)
+		if (cnt % 20 == 0)
 			System.gc();
 	}
 
-	private void push(JPanel panel) {stack[top++] = panel;}
-	private JPanel pop() {return stack[--top];}
+	void push(JPanel panel) {
+		this.mainFrame.remove(stack[top - 1]);
+		stack[top++] = panel;
+		displayPage(panel);
+	}
+	void pop() {
+		this.mainFrame.remove(stack[top - 1]);
+		displayPage(stack[top - 2]);
+		--top;
+	}
 
 }
