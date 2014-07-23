@@ -72,7 +72,7 @@ public class Client {
 		// TODO Auto-generated method stub
 		//returns the last order-th sentence that User me and friend had talked
 		//if the required sentence is spoken by me, add a zero in the front, else add a one
-		return "0I am speaking";
+		return "1I am speaking";
 	}
 
 	public String getPasswordOfUser(User curUser) {
@@ -141,5 +141,15 @@ public class Client {
 	public void deleteFriend(String userID) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void deleteAllRecordWith(String userID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public int getNumberOfMessages(String userID) {
+		// TODO Auto-generated method stub
+		return 20;
 	}
 }

@@ -55,6 +55,7 @@ public class UIDisplay {
 			stack[top - 1] = new FriendPage(client);
 		displayPage(panel);
 	}
+	
 	void pop() {
 		this.mainFrame.remove(stack[top - 1]);
 		if (stack[top - 2] instanceof FriendPage)
