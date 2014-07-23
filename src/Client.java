@@ -3,15 +3,18 @@ import javax.swing.*;
 
 public class Client {
 	UIDisplay ui;
+	Communicator communicator;
+	User curUser = new User();
 	
-	public static void main(String args[])
+	public static void main(String args[]) throws Exception
 	{
 		Client client = new Client();
 		client.go();
 	}
 
-	private void go() {
+	private void go() throws Exception {
 		ui = new UIDisplay(this);
+		communicator = new Communicator();
 		ui.init();
 	}
 
@@ -26,20 +29,35 @@ public class Client {
 	}
 
 	public static ImageIcon getDefaultUserIcon() {
-		// TODO Auto-generated method stub
 		return new ImageIcon("resources/icons/2.png");
 	}
 
 	public int tryLogin(String userID, String password) {
-		// TODO Auto-generated method stub
 		//0 for ServerNotFound, 1 for IDNotFound, 2 for IncorrectPassword, -1 for succeed
-		return -1;
+		int ret = 0;
+		try {
+			ret = this.communicator.login(userID, password);
+			if (ret == -1)
+				this.communicator.getUser(userID, curUser);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ret;
 	}
 
 	public int createNewAccount(String id, String name, String password, ImageIcon image) {
-		// TODO Auto-generated method stub
 		//0 for ServerNotFound, 1 for ID exists, -1 for succeed
-		return -1;
+		int ret = -1;
+		try {
+			ret = this.communicator.create(id, name, password, "image");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (ret == -1)
+			curUser = new User(id, name, password, "image");
+		return ret;
 	}
 
 	public int personNumberTalkedToLocally() {
@@ -82,7 +100,7 @@ public class Client {
 
 	public int editAccount(String id, String newName, String newPassword, ImageIcon newImage) {
 		// TODO Auto-generated method stub
-		//0 for ServerNotFound, 1 for ID exists, -1 for succeed
+		//0 for ServerNotFound, -1 for succeed
 		System.out.println(newPassword);
 		return -1;
 	}

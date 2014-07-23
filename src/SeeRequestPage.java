@@ -41,7 +41,6 @@ public class SeeRequestPage extends JPanel {
 			display.add("East", buttons);
 			mainScreen.add(display);
 			accept.addActionListener(new ActionListener(){
-
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					client.acceptRequestWith(client.getUserID(curRequest));

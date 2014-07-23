@@ -71,15 +71,27 @@ public class RegisterPage extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String info = "";
-				if (id.getText().equals(""))
+				if (id.getText().equals("") || id.getText().indexOf(' ') != -1)
 				{
-					info = "ID should not be empty!";
+					info = "ID should not be empty or contain spaces!";
 					JOptionPane.showMessageDialog(client.ui.mainFrame, info, "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				if (name.getText().equals(""))
+				if (name.getText().equals("") || name.getText().indexOf(' ') != -1)
 				{
-					info = "Name should not be empty!";
+					info = "Name should not be empty or contain spaces!";
+					JOptionPane.showMessageDialog(client.ui.mainFrame, info, "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				if (String.valueOf(password.getPassword()).indexOf(' ') != -1)
+				{
+					info = "Password should not contain spaces!";
+					JOptionPane.showMessageDialog(client.ui.mainFrame, info, "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				if (String.valueOf(password.getPassword()).equals(""))
+				{
+					info = "Password should not be empty!";
 					JOptionPane.showMessageDialog(client.ui.mainFrame, info, "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -101,7 +113,6 @@ public class RegisterPage extends JPanel {
 					JOptionPane.showMessageDialog(client.ui.mainFrame, info, "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				client.tryLogin(id.getText(), String.valueOf(password.getPassword()));
 				client.ui.setPage(client.ui.mainPage = new MainPage(client));
 			}
 			

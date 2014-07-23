@@ -63,6 +63,13 @@ public class LoginPage extends JPanel{
 			public void actionPerformed(ActionEvent arg0) {
 				int ret = client.tryLogin(idInput.getText(), String.valueOf(password.getPassword()));
 				String info = "";
+				if (idInput.getText().indexOf(' ') != -1)
+				{
+					info = "ID cannot contain spaces!";
+					ret = 3;
+				}
+				if (String.valueOf(password.getPassword()).equals(""))
+					ret = 2;
 				switch (ret)
 				{
 				case 0:info = "Server Not Found!";break;
