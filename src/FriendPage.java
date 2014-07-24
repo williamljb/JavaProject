@@ -55,10 +55,10 @@ public class FriendPage extends JPanel {
 			}
 			else
 			{
-				JLabel image = new JLabel(new ImageIcon(client.getUserIcon(client.getCurUser()).getImage()
+				final User curFriend = client.getKthFriend(i);
+				JLabel image = new JLabel(new ImageIcon(client.getUserIcon(curFriend).getImage()
 						.getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 				display.add("West", image);
-				final User curFriend = client.getKthFriend(i);
 				JLabel name = new JLabel(client.getUserName(curFriend));
 				name.setFont(new Font("Dialog", 1, 20));
 				display.add("Center", name);

@@ -8,5 +8,5 @@ public class User {
 		this.password = pass;
 		this.image = image;
 	}
-	User(){}
+	User(){id = "a"; name = "NULL"; password = "NULL";}
 }

@@ -22,7 +22,8 @@ public class LoginPage extends JPanel{
 		this.setSize(300, 300);
 		this.setLocation((UIDisplay.WIDTH - 300) / 2, (UIDisplay.HEIGHT - 300) / 3);
 		//icon
-		icon = new JLabel(new ImageIcon(client.getLastUserIcon().
+		icon = new JLabel();
+		icon.setIcon(new ImageIcon(client.getLastUserIcon().
 				getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 		JPanel iconPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		iconPanel.add(icon);
@@ -61,15 +62,17 @@ public class LoginPage extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int ret = client.tryLogin(idInput.getText(), String.valueOf(password.getPassword()));
+				int ret = 4;
 				String info = "";
-				if (idInput.getText().indexOf(' ') != -1)
-				{
-					info = "ID cannot contain spaces!";
-					ret = 3;
-				}
 				if (String.valueOf(password.getPassword()).equals(""))
 					ret = 2;
+				if (idInput.getText().equals("") || idInput.getText().indexOf(' ') != -1)
+				{
+					info = "ID cannot contain spaces or be empty!";
+					ret = 3;
+				}
+				if (ret == 4)
+					ret = client.tryLogin(idInput.getText(), String.valueOf(password.getPassword()));
 				switch (ret)
 				{
 				case 0:info = "Server Not Found!";break;

@@ -16,6 +16,7 @@ public class RegisterPage extends JPanel {
 	JPasswordField password, passConfirm;
 	JButton upload, register;
 	JLabel title, image;
+	String imagePath = "resources/icons/2.png";
 
 	public RegisterPage(Client cli) {
 		client = cli;
@@ -58,7 +59,7 @@ public class RegisterPage extends JPanel {
 				fc.setFileFilter(filter);
 				int ret = fc.showOpenDialog(client.ui.mainFrame);
 				if (ret == JFileChooser.APPROVE_OPTION)
-					image.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(fc.getSelectedFile().getPath())
+					image.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(imagePath = fc.getSelectedFile().getPath())
 							.getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 				client.ui.stack[0].repaint();
 			}
@@ -102,7 +103,7 @@ public class RegisterPage extends JPanel {
 					return;
 				}
 				int ret = client.createNewAccount(id.getText(), name.getText(), 
-						String.valueOf(password.getPassword()), (ImageIcon)image.getIcon());
+						String.valueOf(password.getPassword()), imagePath);
 				switch (ret)
 				{
 				case 0:info = "Server Not Found!";break;

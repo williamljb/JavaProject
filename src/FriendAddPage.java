@@ -39,6 +39,11 @@ public class FriendAddPage extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (inputID.getText().equals(""))
+				{
+					JOptionPane.showMessageDialog(client.ui.mainFrame, "ID cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				int ret = client.findUserID(inputID.getText());
 				String info = "Request sent. Please wait for reply.";
 				switch (ret)

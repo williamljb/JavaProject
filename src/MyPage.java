@@ -16,6 +16,7 @@ public class MyPage extends JPanel {
 	JPasswordField password, passConfirm;
 	JButton upload, register;
 	JLabel title, image;
+	String imagePath = "resources/icons/2.png";
 
 	public MyPage(Client cli) {
 		client = cli;
@@ -47,7 +48,7 @@ public class MyPage extends JPanel {
 		conPanel.add(passConfirm);
 		//upload
 		upload = new JButton("Upload Image...");
-		image = new JLabel(new ImageIcon(Client.getDefaultUserIcon().
+		image = new JLabel(new ImageIcon(client.getUserIcon(client.getCurUser()).
 				getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 		upload.addActionListener(new ActionListener(){
 
@@ -59,7 +60,7 @@ public class MyPage extends JPanel {
 				fc.setFileFilter(filter);
 				int ret = fc.showOpenDialog(client.ui.mainFrame);
 				if (ret == JFileChooser.APPROVE_OPTION)
-					image.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(fc.getSelectedFile().getPath())
+					image.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(imagePath = fc.getSelectedFile().getPath())
 							.getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 				client.ui.stack[0].repaint();
 			}
@@ -88,7 +89,7 @@ public class MyPage extends JPanel {
 				if (String.valueOf(password.getPassword()).equals(""))
 					password.setText(client.getPasswordOfUser(client.getCurUser()));
 				int ret = client.editAccount(id.getText(), name.getText(), 
-						String.valueOf(password.getPassword()), (ImageIcon)image.getIcon());
+						String.valueOf(password.getPassword()), imagePath);
 				switch (ret)
 				{
 				case 0:info = "Server Not Found!";break;
@@ -112,6 +113,7 @@ public class MyPage extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				client.logout();
 				client.ui.setPage(client.ui.login = new LoginPage(client));
 			}
 			

@@ -2,6 +2,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import javax.imageio.*;
+
 public class Communicator {
 	PrintWriter out;
 	BufferedReader in;
@@ -11,7 +13,7 @@ public class Communicator {
 	{
 		Socket socket;
 		try {
-			socket = new Socket("166.111.227.148", 2048);
+			socket = new Socket(Client.ipAddress, 2048);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out = new PrintWriter(socket.getOutputStream());
 		} catch (UnknownHostException e) {
@@ -22,14 +24,19 @@ public class Communicator {
 		}
 	}
 
-	public int create(String id, String name, String password, String image) throws Exception {
+	public int create(String id, String name, String password, String imagePath) throws Exception {
 		if (this.serverNotFound)
 			return 0;
-		out.println("CREATE profile " + id + " key " + password + " nickname " + name + " image " + image);
+		out.println("CREATE profile " + id + " key " + password + " nickname " + name + " image " + imagePath);
 		out.flush();
 		String ret = in.readLine();
 		if (ret.charAt(0) == '1')
 			return 1;
+		
+		this.savePic(imagePath, "./database/" + id + ".jpg");
+		ImageSender test = new ImageSender("./database/" + id + ".jpg");
+    	new Thread(test).start();
+    	
 		return -1;
 	}
 
@@ -47,15 +54,23 @@ public class Communicator {
 	}
 
 	public int getUser(String userID, User user) throws Exception {
+    	ImageReceiver test = new ImageReceiver("./database/" + userID + ".jpg");
+    	Thread send = new Thread(test);
+    	send.start();
+    	
 		out.println("GETUSER " + userID);
 		out.flush();
 		String ret = in.readLine();
 		if (ret.charAt(0) == '1')
+		{
+			test.server.close();
+			test.shouldClose = true;
 			return 1;
+		}
 		Scanner scanner = new Scanner(ret);
 		while(scanner.hasNext()){
 			String tmp = scanner.next();
-			System.out.println(tmp);
+			//System.out.println("@Communicator.java, line 76 : " + tmp);
 			switch(tmp){
 			
 			case "profile":
@@ -74,8 +89,77 @@ public class Communicator {
 				//System.out.println("Something haven't dealt.");
 			}
 		}
-		System.out.println("ok");
 		scanner.close();
 		return -1;
+	}
+	
+	public void savePic(String imagePath, String add) throws Exception{
+		ImageIO.write(ImageIO.read(new File(imagePath)), "jpg", new File(add));
+    }
+
+	public int edit(String id, String name, String password, String imagePath) throws Exception {
+		if (this.serverNotFound)
+			return 0;
+		out.println("EDIT profile " + id + " key " + password + " nickname " + name + " image " + imagePath);
+		out.flush();
+		String ret = in.readLine();
+		if (ret.charAt(0) == '1')
+			return 1;
+		
+		this.savePic(imagePath, "./database/" + id + ".jpg");
+		ImageSender test = new ImageSender("./database/" + id + ".jpg");
+    	new Thread(test).start();
+    	
+		return -1;
+	}
+
+	public int logout(String id) throws Exception {
+		//System.out.println("ok");
+		if (this.serverNotFound)
+			return 0;
+		out.println("LOGOUT " + id);
+		out.flush();
+		String ret = in.readLine();
+		if (ret.charAt(0) == '1')
+			return 1;
+		if (ret.charAt(0) == '2')
+			return 2;
+		return -1;
+	}
+
+	public int idExists(String userID) throws Exception {
+		if (this.serverNotFound)
+			return 0;
+		out.println("IDEXISTS " + userID);
+		out.flush();
+		String ret = in.readLine();
+		if (ret.charAt(0) == '1')
+			return 1;
+		return -1;
+	}
+
+	public void sendRequest(String curID, String userID) throws Exception {
+		out.println("SENDREQUEST " + curID + " " + userID);
+		out.flush();
+		in.readLine();
+	}
+
+	public void request(HashSet<String> set, String userID) throws Exception {
+		out.println("REQUEST " + userID);
+		out.flush();
+		String ret = in.readLine();
+		if (ret.equals(""))
+			return;
+		for (String id : ret.split(" "))
+		{
+			//System.out.println("id"+id);
+			set.add(id);
+		}
+	}
+
+	public void acceptRequest(String curID, String userID) throws Exception {
+		out.println("ACCEPTREQUEST " + curID + " " + userID);
+		out.flush();
+		in.readLine();
 	}
 }

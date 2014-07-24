@@ -1,3 +1,7 @@
+import java.awt.*;
+import java.io.*;
+import java.util.*;
+
 import javax.swing.*;
 
 
@@ -5,6 +9,10 @@ public class Client {
 	UIDisplay ui;
 	Communicator communicator;
 	User curUser = new User();
+	String LastUserID;
+	HashSet<String> set;
+	String ids[];
+	final static String ipAddress = "166.111.227.148";
 	
 	public static void main(String args[]) throws Exception
 	{
@@ -13,23 +21,25 @@ public class Client {
 	}
 
 	private void go() throws Exception {
+		BufferedReader tmp = new BufferedReader(new InputStreamReader(new FileInputStream("database/record/LastUser.txt")));
+		this.LastUserID = tmp.readLine();
 		ui = new UIDisplay(this);
 		communicator = new Communicator();
 		ui.init();
+		tmp.close();
 	}
 
 	public ImageIcon getLastUserIcon() {
-		// TODO Auto-generated method stub
-		return new ImageIcon("resources/icons/1.png");
+		return new ImageIcon("database/record/LastUser.jpg");
 	}
 
 	public String getLastUserID() {
-		// TODO Auto-generated method stub
-		return "";
+		return this.LastUserID;
 	}
 
 	public static ImageIcon getDefaultUserIcon() {
-		return new ImageIcon("resources/icons/2.png");
+		return new ImageIcon(new ImageIcon("resources/icons/default.png").
+				getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
 	}
 
 	public int tryLogin(String userID, String password) {
@@ -40,19 +50,18 @@ public class Client {
 			if (ret == -1)
 				this.communicator.getUser(userID, curUser);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("@Client.java, line 46 : " + curUser.id);
 		return ret;
 	}
 
-	public int createNewAccount(String id, String name, String password, ImageIcon image) {
+	public int createNewAccount(String id, String name, String password, String imagePath) {
 		//0 for ServerNotFound, 1 for ID exists, -1 for succeed
 		int ret = -1;
 		try {
-			ret = this.communicator.create(id, name, password, "image");
+			ret = this.communicator.create(id, name, password, imagePath);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (ret == -1)
@@ -72,18 +81,31 @@ public class Client {
 	}
 
 	public ImageIcon getUserIcon(User curUser) {
-		// TODO Auto-generated method stub
-		return getDefaultUserIcon();
+		String path = "database/" + curUser.id + ".jpg";
+		if (new File(path).exists())
+		{
+			System.out.println(path);
+			return new ImageIcon(path);
+		}
+		else
+			try {
+				if (this.communicator.getUser(curUser.id, curUser) == -1)
+					return new ImageIcon(path);
+				else
+					return Client.getDefaultUserIcon();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		return Client.getDefaultUserIcon();
 	}
 
 	public String getUserName(User curUser) {
-		// TODO Auto-generated method stub
-		return "Default";
+		return curUser.name;
 	}
 
 	public User getCurUser() {
 		// TODO Auto-generated method stub
-		return new User();
+		return curUser;
 	}
 
 	public String getConversation(User me, User friend, int order) {
@@ -94,20 +116,24 @@ public class Client {
 	}
 
 	public String getPasswordOfUser(User curUser) {
-		// TODO Auto-generated method stub
-		return "";
+		return curUser.password;
 	}
 
-	public int editAccount(String id, String newName, String newPassword, ImageIcon newImage) {
-		// TODO Auto-generated method stub
+	public int editAccount(String id, String name, String password, String imagePath) {
 		//0 for ServerNotFound, -1 for succeed
-		System.out.println(newPassword);
-		return -1;
+		int ret = -1;
+		try {
+			ret = this.communicator.edit(id, name, password, imagePath);
+			if (ret == -1)
+				this.communicator.getUser(id, curUser);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 
 	public String getUserID(User curUser) {
-		// TODO Auto-generated method stub
-		return "heyhey";
+		return curUser.id;
 	}
 
 	public int getNumberOfFriends() {
@@ -116,29 +142,54 @@ public class Client {
 	}
 
 	public int findUserID(String userID) {
-		// TODO Auto-generated method stub
 		//0 for ServerNotFound, 1 for NoSuchID, -1 for succeed
-		return -1;
+		int ret = 0;
+		try {
+			ret = this.communicator.idExists(userID);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 
 	public void sendFriendRequestTo(String userID) {
-		// TODO Auto-generated method stub
-		
+		try {
+			this.communicator.sendRequest(this.curUser.id, userID);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public int getNumberOfRequest() {
-		// TODO Auto-generated method stub
-		return 10;
+		set = new HashSet<String>();
+		try {
+			this.communicator.request(set, curUser.id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		ids = set.toArray(new String[set.size()]);
+		return set.size();
 	}
 
 	public User getUserOfRequest(int i) {
-		// TODO Auto-generated method stub
-		return new User();
+		User user = new User();
+		try {
+			this.communicator.getUser(ids[i], user);
+			//System.out.println(user.id + " " + user.name);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return user;
 	}
 
 	public void acceptRequestWith(String userID) {
-		// TODO Auto-generated method stub
-		
+		try {
+			this.communicator.acceptRequest(userID, curUser.id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public User getKthFriend(int i) {
@@ -148,7 +199,13 @@ public class Client {
 
 	public User getUserById(String userID) {
 		// TODO Auto-generated method stub
-		return new User();
+		User user = new User();
+		try {
+			this.communicator.getUser(userID, user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return user;
 	}
 
 	public boolean isFriend(String userID) {
@@ -169,5 +226,19 @@ public class Client {
 	public int getNumberOfMessages(String userID) {
 		// TODO Auto-generated method stub
 		return 20;
+	}
+
+	public void logout() {
+		try {
+			this.LastUserID = curUser.id;
+			System.out.println(this.LastUserID);
+			communicator.logout(curUser.id);
+			communicator.savePic("database/" + curUser.id + ".jpg", "database/record/LastUser.jpg");
+			OutputStreamWriter tmp = new OutputStreamWriter(new FileOutputStream("database/record/LastUser.txt"));
+			tmp.write(this.LastUserID + "\n");
+			tmp.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
