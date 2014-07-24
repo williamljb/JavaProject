@@ -3,7 +3,7 @@ package tw.thu.test;
 import java.io.*;
 import java.net.*;
 
-public class ImageReceiver {
+public class ImageReceiver implements Runnable{
 
 	File receiveAddress;
 	
@@ -12,7 +12,7 @@ public class ImageReceiver {
 		this.receiveAddress = new File(add);
 	}
 	
-	public void go()
+	public void run()
 	{
         int length = 0;
         byte[] sendBytes = null;
@@ -46,6 +46,6 @@ public class ImageReceiver {
 	
     public static void main(String[] args) {
     	ImageReceiver test = new ImageReceiver("./a.png");
-    	test.go();
+    	new Thread(test).start();
     }
 }
