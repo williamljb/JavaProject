@@ -38,6 +38,7 @@ class ServerThread extends Thread
 		this.socket=socket;
 		clientnum=num+1; 
 	}
+	
 	public void run() 
 	{ 
 		try
@@ -55,7 +56,7 @@ class ServerThread extends Thread
 			line=is.readLine();
 			SReceiveData receive = new SReceiveData();
 			//receive.receiveClientData(line);
-			os.println(receive.receiveClientData(line)); 
+			os.println(receive.receiveClientData(line, this.socket)); 
 			os.flush();
 			/*System.out.println(line);
 			System.out.flush();*/

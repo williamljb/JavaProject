@@ -1,9 +1,9 @@
-package tw.thu.test;
+package background;
 
 import java.io.*;
 import java.net.*;
 
-public class ImageReceiver implements Runnable{
+public class ImageReceiver implements Runnable {
 
 	File receiveAddress;
 	
@@ -12,40 +12,69 @@ public class ImageReceiver implements Runnable{
 		this.receiveAddress = new File(add);
 	}
 	
-	public void run()
-	{
+    /*public static void main(String[] args) {
+    	ImageReceiver test = new ImageReceiver("./b.png");
+    	new Thread(test).start();
+    }*/
+
+    public void run() {
+        try {
+            final ServerSocket server = new ServerSocket(33457);
+            Thread th = new Thread(new Runnable() {
+                public void run() {
+                    while (true) {
+                        try {
+                            //System.out.println("27@ImageReceiver.java");
+                            Socket socket = server.accept();
+                            //System.out.println("29@ImageReceiver.java");
+                            receiveFile(socket);
+                            server.close();
+                            break;
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+
+            });
+
+            th.run(); 
+            //System.out.println("41@ImageReceiver.java");
+            server.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void receiveFile(Socket socket) {
+
+        byte[] inputByte = null;
         int length = 0;
-        byte[] sendBytes = null;
-        Socket socket = null;
-        DataOutputStream dos = null;
-        FileInputStream fis = null;
+        DataInputStream dis = null;
+        FileOutputStream fos = null;
         try {
             try {
-                socket = new Socket();
-                socket.connect(new InetSocketAddress("127.0.0.1", 33457), 10 * 1000);
-                dos = new DataOutputStream(socket.getOutputStream());
-                File file = this.receiveAddress;
-                fis = new FileInputStream(file);
-                sendBytes = new byte[1024];
-                while ((length = fis.read(sendBytes, 0, sendBytes.length)) > 0) {
-                    dos.write(sendBytes, 0, length);
-                    dos.flush();
+
+                dis = new DataInputStream(socket.getInputStream());
+                fos = new FileOutputStream(receiveAddress);
+                inputByte = new byte[1024];
+                //System.out.println("59@ImageReceiver.java");
+                while ((length = dis.read(inputByte, 0, inputByte.length)) > 0) {
+                    //System.out.println(length);
+                    fos.write(inputByte, 0, length);
+                    fos.flush();
                 }
+                //System.out.println("65@ImageReceiver.java");
             } finally {
-                if (dos != null)
-                    dos.close();
-                if (fis != null)
-                    fis.close();
+                if (fos != null)
+                    fos.close();
+                if (dis != null)
+                    dis.close();
                 if (socket != null)
                     socket.close();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
-	}
-	
-    public static void main(String[] args) {
-    	ImageReceiver test = new ImageReceiver("./a.png");
-    	new Thread(test).start();
+
     }
 }
