@@ -187,6 +187,17 @@ public class SReceiveData{
 		String to = in.next();
 		in.close();
 		return new FriendMethods().DeleteFriend(from, to);
+	}else if(this.command.equals("UNREAD")){
+		String from = in.next();
+		String to = in.next();
+		in.close();
+		return MessageMethods.CheckUnread(from, to);
+	}else if(this.command.equals("SENDMESSAGE")){
+		String from = in.next();
+		String to = in.next();
+		String text = in.next();
+		in.close();
+		return MessageMethods.SendMessage(from, to, text);
 	}
 		
 		in.close();

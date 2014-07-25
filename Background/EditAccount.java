@@ -9,58 +9,13 @@ public class EditAccount {
 		
 		
 		int flag = 0;
-		//boolean found;
+		
 		
 		System.out.println("14@EditAccount.java");
 		
 		try{
 		
-			//File f = new File("data.txt");
-			/*FileWriter fw = new FileWriter("data.txt");
-			FileReader fr = new FileReader("data.txt");
-	        BufferedReader br = new BufferedReader(fr);
-	        String charSet = new String();
 			
-			SearchMethods find = new SearchMethods();
-			found = find.search(ID);
-			System.out.println(found);
-		
-		if(!found){
-			fw.close();
-			br.close();
-			return 1;//ID not found
-		}
-		else{
-			 	
-		        
-		        
-		        do{
-		            
-		               charSet=br.readLine();
-		               
-		               if(charSet==null)
-		                   break;
-		            
-		               if(find.checkData(charSet, ID)){
-		            	   fw.write("profile "+ ID + " key " + password + " nickname " + nickname + " Unread " + unread 
-		   		        		+ " friend " + friendList + "\n");  
-		   		           fw.flush();
-		               }else{
-		            	   fw.write(charSet);
-		            	   fw.flush();
-		               }
-		               
-		               //System.out.println(charSet);
-		           } while(true);
-		        
-		        
-		        
-		       
-		        
-				
-		        br.close();
-		        fw.close();
-		        }*/
 				FileWriter fw = new FileWriter("./data/" + ID + "/info.txt");
 				fw.write("profile "+ ID + " key " + password + " nickname " + nickname + " Unread " + unread 
    		        		+ " friend " + friendList + "\n");  
@@ -79,6 +34,57 @@ public class EditAccount {
 			return flag;
 		}
         
+	}
+	
+	void editStatus(String ID, String Unread){
+		
+		//boolean found;
+		//File f = new File("data.txt");
+		/*FileWriter fw = new FileWriter("data.txt");
+		FileReader fr = new FileReader("data.txt");
+        BufferedReader br = new BufferedReader(fr);
+        String charSet = new String();
+		
+		SearchMethods find = new SearchMethods();
+		found = find.search(ID);
+		System.out.println(found);
+	
+	if(!found){
+		fw.close();
+		br.close();
+		return 1;//ID not found
+	}
+	else{
+		 	
+	        
+	        
+	        do{
+	            
+	               charSet=br.readLine();
+	               
+	               if(charSet==null)
+	                   break;
+	            
+	               if(find.checkData(charSet, ID)){
+	            	   fw.write("profile "+ ID + " key " + password + " nickname " + nickname + " Unread " + unread 
+	   		        		+ " friend " + friendList + "\n");  
+	   		           fw.flush();
+	               }else{
+	            	   fw.write(charSet);
+	            	   fw.flush();
+	               }
+	               
+	               //System.out.println(charSet);
+	           } while(true);
+	        
+	        
+	        
+	       
+	        
+			
+	        br.close();
+	        fw.close();
+	        }*/
 	}
 	
 	
