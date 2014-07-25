@@ -25,7 +25,7 @@ public class SReceiveData{
 		
 		this.command = in.next();
 		
-		System.out.println(this.command);
+		System.out.println(this.command + " command @28.SReceiveData.java");
 		
 		if(this.command.equals("CREATE")){
 		
@@ -44,22 +44,22 @@ public class SReceiveData{
 			case "key":
 				this.password = in.next();
 				break;
-			/*case "Unread":
+			case "Unread":
 				this.hasUnreadMMS = in.next();
 				if(this.hasUnreadMMS.equals("yes")){
 					unread = true;
 				}else{
 					unread = false;
 				}
-				break;*/
+				break;
 			case "friend":
 				while(in.hasNext()){
 					this.friendID.add(in.next());
 				}
 				break;
-			/*case "image":
+			case "image":
 				this.image = in.next();
-				break;*/
+				break;
 			default:
 				System.out.println("Something haven't dealt.");
 			}
@@ -68,6 +68,8 @@ public class SReceiveData{
 		CreateAccount addAccount = new CreateAccount();
 		this.result = addAccount.writeData(this.id, this.password, this.name, this.hasUnreadMMS, this.image, friendID);
 		in.close();
+		LogMethods log = new LogMethods();
+		log.LogIn(this.id, clientSocket);
 		return String.valueOf(this.result);
 	}else if(this.command.equals("LOGIN")){
 		
@@ -147,7 +149,7 @@ public class SReceiveData{
 		return String.valueOf(this.result);
 	}else if(this.command.equals("LOGOUT")){
 		this.id = in.next();
-		System.out.println(this.id);
+		System.out.println(this.id + " logout @152.SReceiveData.java");
 		in.close();
 		
 		return new LogMethods().LogOut(this.id);
@@ -156,7 +158,7 @@ public class SReceiveData{
 		System.out.println("156@SReceiveData");
 		this.id = in.next();
 		in.close();
-		System.out.println(this.id + " 159@SReceiveData");
+		System.out.println(this.id + " IDEXISTS@161.SReceiveData");
 		return new SearchMethods().idExist(this.id);
 		
 	}else if(this.command.equals("SENDREQUEST")){
@@ -176,6 +178,15 @@ public class SReceiveData{
 		String to = in.next();
 		in.close();
 		return new FriendMethods().AcceptFdRequest(from, to);	
+	}else if(this.command.equals("FRIEND")){
+		this.id = in.next();
+		in.close();
+		return new FriendMethods().ReturnFdList(this.id);	
+	}else if(this.command.equals("DELETEFRIEND")){
+		String from = in.next();
+		String to = in.next();
+		in.close();
+		return new FriendMethods().DeleteFriend(from, to);
 	}
 		
 		in.close();
