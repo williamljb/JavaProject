@@ -52,6 +52,18 @@ public class LoginPage extends JPanel{
 		JPanel passPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		passPanel.add(new JLabel("Password:"));
 		passPanel.add(password);
+		password.addKeyListener(new KeyListener(){
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (e.getKeyChar() == KeyEvent.VK_ENTER)
+					(login.getListeners(ActionListener.class))[0].actionPerformed(null);
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {}
+			@Override
+			public void keyReleased(KeyEvent e) {}
+		});
 		//button
 		login = new JButton("Login");
 		register = new JButton("Register");

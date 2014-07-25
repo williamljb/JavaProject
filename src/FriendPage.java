@@ -17,7 +17,7 @@ public class FriendPage extends JPanel {
 		client = cli;
 		//friend list
 		int num = client.getNumberOfFriends();
-		JPanel listPanel = new JPanel(new GridLayout(num + 1, 1));
+		JPanel listPanel = new JPanel(new GridLayout(num + 1 < 6 ? 6 : num + 1, 1));
 		JScrollPane screen = new JScrollPane(listPanel);
 		screen.setPreferredSize(new Dimension(UIDisplay.WIDTH, UIDisplay.HEIGHT - 150));
 		screen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -66,7 +66,7 @@ public class FriendPage extends JPanel {
 
 					@Override
 					public void mouseClicked(MouseEvent arg0) {
-						client.ui.push(client.ui.userPage = new UserPage(client, client.getUserID(curFriend)));
+						client.ui.push(client.ui.userPage = new UserPage(client, client.getUserID(curFriend), false));
 					}
 
 					@Override
@@ -82,6 +82,12 @@ public class FriendPage extends JPanel {
 					public void mouseReleased(MouseEvent arg0) {}
 				});
 			}
+			listPanel.add(display);
+		}
+		for (int i = 0; i < 6 - num - 1; ++i)
+		{
+			JPanel display = new JPanel(new BorderLayout());
+			display.setSize(new Dimension(UIDisplay.WIDTH, (UIDisplay.HEIGHT - 150) / 6));
 			listPanel.add(display);
 		}
 		//Buttons

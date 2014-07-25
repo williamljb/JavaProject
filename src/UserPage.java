@@ -13,7 +13,7 @@ public class UserPage extends JPanel {
 	Client client;
 	JButton send, operate, back;
 
-	public UserPage(Client cli, final String userID) {
+	public UserPage(Client cli, final String userID, final boolean shouldBack) {
 		client = cli;
 		//info
 		JPanel display = new JPanel(new BorderLayout());
@@ -51,7 +51,10 @@ public class UserPage extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				client.ui.push(client.ui.talkPage = new TalkPage(client, userID));
+				if (shouldBack)
+					client.ui.pop();
+				else
+					client.ui.push(client.ui.talkPage = new TalkPage(client, userID));
 			}
 			
 		});
@@ -69,6 +72,7 @@ public class UserPage extends JPanel {
 					client.deleteFriend(userID);
 					System.out.println("ok");
 					client.ui.pop();
+					client.ui.stack[client.ui.top - 1].repaint();
 				}
 				else
 				{

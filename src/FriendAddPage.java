@@ -59,7 +59,7 @@ public class FriendAddPage extends JPanel {
 				else
 				{
 					//client.sendFriendRequestTo(inputID.getText());
-					client.ui.push(client.ui.userPage = new UserPage(client, inputID.getText()));
+					client.ui.push(client.ui.userPage = new UserPage(client, inputID.getText(), false));
 					//JOptionPane.showMessageDialog(client.ui.mainFrame, info, "info", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}

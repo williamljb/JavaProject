@@ -28,7 +28,7 @@ public class MainPage extends JPanel {
 					getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 			display.add("West", image);
 			String userName = client.getUserName(curTalked);
-			String lastSentence = client.getConversation(client.getCurUser(), curTalked, 0);
+			String lastSentence = client.getConversation(client.getCurUser(), curTalked);
 			if (lastSentence.startsWith("0"))
 				lastSentence = "Me : " + lastSentence.substring(1);
 			else

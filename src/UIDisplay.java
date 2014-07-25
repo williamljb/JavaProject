@@ -58,14 +58,14 @@ public class UIDisplay {
 		displayPage(page);
 	}
 
-	private void displayPage(JPanel page) {
+	void displayPage(JPanel page) {
 		this.mainFrame.setLayout(null);
 		this.mainFrame.add(page);
 		this.mainFrame.setSize(WIDTH, HEIGHT);
 		this.mainFrame.setVisible(true);
 		this.mainFrame.repaint();
 		++cnt;
-		if (cnt % 20 == 0)
+		if (cnt % 2 == 0)
 			System.gc();
 	}
 

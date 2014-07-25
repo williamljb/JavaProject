@@ -12,7 +12,9 @@ public class Client {
 	String LastUserID;
 	HashSet<String> set;
 	String ids[];
-	final static String ipAddress = "166.111.227.148";
+	ArrayList<String> friends, records;
+	final static String ipAddress = //"127.0.0.1";
+									"166.111.227.148";
 	
 	public static void main(String args[]) throws Exception
 	{
@@ -52,7 +54,7 @@ public class Client {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("@Client.java, line 46 : " + curUser.id);
+		//System.out.println("@Client.java, line 46 : " + curUser.id);
 		return ret;
 	}
 
@@ -81,10 +83,11 @@ public class Client {
 	}
 
 	public ImageIcon getUserIcon(User curUser) {
-		String path = "database/" + curUser.id + ".jpg";
+		String path = System.getProperty("user.dir") + "/database/" + curUser.id + ".jpg";
+		//System.out.println(path);
 		if (new File(path).exists())
 		{
-			System.out.println(path);
+			//System.out.println("here");
 			return new ImageIcon(path);
 		}
 		else
@@ -108,11 +111,11 @@ public class Client {
 		return curUser;
 	}
 
-	public String getConversation(User me, User friend, int order) {
-		// TODO Auto-generated method stub
+	public String getConversation(int order) {
 		//returns the last order-th sentence that User me and friend had talked
 		//if the required sentence is spoken by me, add a zero in the front, else add a one
-		return "1I am speaking";
+		//it is already stored in records
+		return this.records.get(order);
 	}
 
 	public String getPasswordOfUser(User curUser) {
@@ -136,11 +139,6 @@ public class Client {
 		return curUser.id;
 	}
 
-	public int getNumberOfFriends() {
-		// TODO Auto-generated method stub
-		return 10;
-	}
-
 	public int findUserID(String userID) {
 		//0 for ServerNotFound, 1 for NoSuchID, -1 for succeed
 		int ret = 0;
@@ -160,6 +158,18 @@ public class Client {
 		}
 	}
 
+	public int getNumberOfFriends() {
+		this.friends = new ArrayList<String>();
+		try {
+			this.communicator.friend(friends, curUser.id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Collections.sort(friends);
+		ids = friends.toArray(new String[friends.size()]);
+		return friends.size();
+	}
+	
 	public int getNumberOfRequest() {
 		set = new HashSet<String>();
 		try {
@@ -193,12 +203,18 @@ public class Client {
 	}
 
 	public User getKthFriend(int i) {
-		// TODO Auto-generated method stub
-		return new User();
+		User user = new User();
+		try {
+			this.communicator.getUser(ids[i], user);
+			//System.out.println(user.id + " " + user.name);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return user;
 	}
 
 	public User getUserById(String userID) {
-		// TODO Auto-generated method stub
 		User user = new User();
 		try {
 			this.communicator.getUser(userID, user);
@@ -209,13 +225,20 @@ public class Client {
 	}
 
 	public boolean isFriend(String userID) {
-		// TODO Auto-generated method stub
+		int n = this.getNumberOfFriends();
+		for (int i = 0; i < n; ++i)
+			if (ids[i].equals(userID))
+				return true;
 		return false;
 	}
 
 	public void deleteFriend(String userID) {
-		// TODO Auto-generated method stub
-		
+		try {
+			this.communicator.deleteFriend(curUser.id, userID);
+			//System.out.println("ok");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void deleteAllRecordWith(String userID) {
@@ -224,14 +247,26 @@ public class Client {
 	}
 
 	public int getNumberOfMessages(String userID) {
-		// TODO Auto-generated method stub
-		return 20;
+		records = new ArrayList<String>();
+		if (!new File("database" + File.separator + curUser.id + File.separator + userID + ".txt").exists())
+			return 0;
+		try {
+			FileReader fw = new FileReader("database" + File.separator + curUser.id + File.separator + userID + ".txt");
+			String buffer;
+			BufferedReader in = new BufferedReader(fw);
+			while ((buffer = in.readLine()) != null)
+				records.add(buffer);
+			in.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return records.size();
 	}
 
 	public void logout() {
 		try {
 			this.LastUserID = curUser.id;
-			System.out.println(this.LastUserID);
+			//System.out.println(this.LastUserID);
 			communicator.logout(curUser.id);
 			communicator.savePic("database/" + curUser.id + ".jpg", "database/record/LastUser.jpg");
 			OutputStreamWriter tmp = new OutputStreamWriter(new FileOutputStream("database/record/LastUser.txt"));
@@ -240,5 +275,43 @@ public class Client {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void sendMessage(String userID, String text) {
+		try {
+			this.communicator.sendMessage(curUser.id, userID, text);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		addMessage(curUser.id, userID, text, true);
+		//addMessage(userID, curUser.id, text, false);
+	}
+
+	private void addMessage(String aID, String bID, String text, boolean aToB) {
+		new File("database" + File.separator + aID).mkdirs();
+		try {
+			FileWriter fw = new FileWriter("database" + File.separator + aID + File.separator + bID + ".txt", true);
+			fw.write((aToB ? 0 : 1) + text + "\n");
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String getConversation(User aID, User bID) {
+		String ans = "0";
+		if (!new File("database" + File.separator + aID + File.separator + bID + ".txt").exists())
+			return ans;
+		try {
+			FileReader fw = new FileReader("database" + File.separator + aID + File.separator + bID + ".txt");
+			String buffer;
+			BufferedReader in = new BufferedReader(fw);
+			while ((buffer = in.readLine()) != null)
+				ans = buffer.intern();
+			in.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ans;
 	}
 }

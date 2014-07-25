@@ -90,6 +90,7 @@ public class Communicator {
 			}
 		}
 		scanner.close();
+		send.join();
 		return -1;
 	}
 	
@@ -133,6 +134,7 @@ public class Communicator {
 		out.println("IDEXISTS " + userID);
 		out.flush();
 		String ret = in.readLine();
+		System.out.println(ret);
 		if (ret.charAt(0) == '1')
 			return 1;
 		return -1;
@@ -148,8 +150,9 @@ public class Communicator {
 		out.println("REQUEST " + userID);
 		out.flush();
 		String ret = in.readLine();
-		if (ret.equals(""))
+		if (ret == null || ret.equals(""))
 			return;
+		//System.out.println("communicator, line 154:" + ret);
 		for (String id : ret.split(" "))
 		{
 			//System.out.println("id"+id);
@@ -159,6 +162,35 @@ public class Communicator {
 
 	public void acceptRequest(String curID, String userID) throws Exception {
 		out.println("ACCEPTREQUEST " + curID + " " + userID);
+		out.flush();
+		in.readLine();
+	}
+
+	public void friend(ArrayList<String> friends, String userID) throws Exception {
+		out.println("FRIEND " + userID);
+		out.flush();
+		String ret = in.readLine();
+		//System.out.println("communicator 172 : " + ret.charAt(0));
+		if (ret == null || ret.equals(""))
+		{
+			//System.out.println("communicator175 : ok");
+			return;
+		}
+		for (String id : ret.split(" "))
+		{
+			//System.out.println("id"+id);
+			friends.add(id);
+		}
+	}
+
+	public void deleteFriend(String curID, String userID) throws Exception {
+		out.println("DELETEFRIEND " + curID + " " + userID);
+		out.flush();
+		in.readLine();
+	}
+
+	public void sendMessage(String curID, String userID, String text) throws Exception {
+		out.println("SENDMESSAGE " + curID + " " + userID + " " + text);
 		out.flush();
 		in.readLine();
 	}

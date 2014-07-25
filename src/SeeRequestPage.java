@@ -26,14 +26,14 @@ public class SeeRequestPage extends JPanel {
 		//System.out.println(num);
 		for (int i = 0; i < num; ++i)
 		{
-			System.out.println("in showing page");
+			//System.out.println("in showing page");
 			JPanel display = new JPanel(new BorderLayout());
 			display.setSize(new Dimension(UIDisplay.WIDTH, (UIDisplay.HEIGHT - 150) / 6));
 			curRequest = client.getUserOfRequest(i);
 			JLabel image = new JLabel(new ImageIcon(client.getUserIcon(curRequest).
 					getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 			image.setBounds(0, 0, 100, 100);
-			System.out.println(image.getWidth() + " " + image.getHeight());
+			//System.out.println(image.getWidth() + " " + image.getHeight());
 			display.add("West", image);
 			JLabel userName = new JLabel(client.getUserName(curRequest));
 			userName.setFont(new Font("Dialog", 1, 20));
@@ -44,19 +44,21 @@ public class SeeRequestPage extends JPanel {
 			buttons.add(profile);
 			display.add("East", buttons);
 			mainScreen.add(display);
+			final int order = i;
 			accept.addActionListener(new ActionListener(){
+				int number = order;
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					client.acceptRequestWith(client.getUserID(curRequest));
+					client.acceptRequestWith(client.ids[number]);
 					accept.setEnabled(false);
 				}
 				
 			});
 			profile.addActionListener(new ActionListener(){
-
+				int number = order;
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					client.ui.push(client.ui.userPage = new UserPage(client, client.getUserID(curRequest)));
+					client.ui.push(client.ui.userPage = new UserPage(client, client.ids[number], false));
 				}
 				
 			});
