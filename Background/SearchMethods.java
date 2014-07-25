@@ -27,11 +27,11 @@ public class SearchMethods {
 		
 		for (File childFile : childFiles) {
 			if (childFile.getName().equals(ID)) {
-				System.out.println("30@SearchMethods");
+				System.out.println("idExist@30.SearchMethods.java");
 				return "-1";
 			}
 		}
-		System.out.println("34@SearchMethods");
+		System.out.println("idExist@34.SearchMethods.java");
 		return "1";
 	}
 
