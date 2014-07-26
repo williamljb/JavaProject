@@ -71,7 +71,9 @@ class MessageMethods {
 					tmp = "";
 				}
 				
-				tmp = String.join("\n", urd);
+				tmp = "";
+				for (int i = 0; i < urd.size(); ++i)
+					tmp = tmp + urd.get(i) + "\n";
 				
 				FileWriter fw = new FileWriter(f);
 				ArrayList<String> clean = new ArrayList<String>();
@@ -79,9 +81,10 @@ class MessageMethods {
 					fw.write(w);
 				fw.close();
 				fw = new FileWriter(FileAccessor(fromID, tgID, "Send"), true);
-				fw.write(tmp + "\n");	
+				fw.write(tmp);	
 				fw.close();
-						
+				tmp = String.valueOf(urd.size()) + "\n" + tmp;
+				return tmp;
 			}
 
 		}catch(Exception e){
@@ -94,10 +97,10 @@ class MessageMethods {
 		
 		try{
 			FileWriter fwu = new FileWriter(FileAccessor(toID, fromID, "Check"), true);
-			fwu.write(text + "\n");
+			fwu.write("1" + text + "\n");
 			fwu.close();
 			FileWriter fwh = new FileWriter(FileAccessor(fromID, toID, "Send"), true);
-			fwh.write(text + "\n");
+			fwh.write("0" + text + "\n");
 			fwh.close();
 		}catch(Exception e){
 			System.out.println("Error: " + e + " @103.SendMessage.MessageMethods.java");

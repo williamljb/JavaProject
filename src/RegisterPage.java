@@ -114,7 +114,7 @@ public class RegisterPage extends JPanel {
 					JOptionPane.showMessageDialog(client.ui.mainFrame, info, "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				client.ui.setPage(client.ui.mainPage = new MainPage(client));
+				client.ui.setPage(new MainPage(client));
 			}
 			
 		});

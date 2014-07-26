@@ -101,7 +101,7 @@ public class MyPage extends JPanel {
 					return;
 				}
 				JOptionPane.showMessageDialog(client.ui.mainFrame, "Succeed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-				client.ui.setPage(client.ui.mainPage = new MainPage(client));
+				client.ui.setPage(new MainPage(client));
 			}
 			
 		});

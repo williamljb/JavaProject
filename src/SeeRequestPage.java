@@ -49,7 +49,7 @@ public class SeeRequestPage extends JPanel {
 				int number = order;
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					client.acceptRequestWith(client.ids[number]);
+					client.acceptRequestWith(client.requestids[number]);
 					accept.setEnabled(false);
 				}
 				
@@ -58,7 +58,7 @@ public class SeeRequestPage extends JPanel {
 				int number = order;
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					client.ui.push(client.ui.userPage = new UserPage(client, client.ids[number], false));
+					client.ui.push(client.ui.userPage = new UserPage(client, client.requestids[number], false));
 				}
 				
 			});

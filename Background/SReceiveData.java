@@ -195,7 +195,9 @@ public class SReceiveData{
 	}else if(this.command.equals("SENDMESSAGE")){
 		String from = in.next();
 		String to = in.next();
-		String text = in.next();
+		String text = source.substring(source.indexOf(' ') + 1);
+		text = text.substring(text.indexOf(' ') + 1);
+		text = text.substring(text.indexOf(' ') + 1);
 		in.close();
 		return MessageMethods.SendMessage(from, to, text);
 	}

@@ -194,4 +194,22 @@ public class Communicator {
 		out.flush();
 		in.readLine();
 	}
+
+	public String getUnread(String curID, String userID) throws Exception {
+		out.println("UNREAD " + curID + " " + userID);
+		out.flush();
+		String ans = "", buffer;
+		buffer = in.readLine();
+		if (buffer.equals(""))
+			return "";
+		int num = Integer.parseInt(buffer);
+		for (int i = 0; i < num; ++i)
+		{
+			buffer = in.readLine();
+			ans = ans + buffer + "\n";
+		}
+		buffer = in.readLine();
+		System.out.println(ans);
+		return ans;
+	}
 }

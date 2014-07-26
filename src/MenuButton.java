@@ -22,7 +22,7 @@ public class MenuButton extends JPanel {
 		setButton("resources/icons/main.png", mainButton, i == 0);
 		mainButton.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {client.ui.setPage(client.ui.mainPage = new MainPage(client));}
+			public void actionPerformed(ActionEvent e) {client.ui.setPage(new MainPage(client));}
 		});
 		//friend
 		setButton("resources/icons/friend.png", friendButton, i == 1);

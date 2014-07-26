@@ -14,8 +14,11 @@ public class TalkPage extends JPanel {
 	JButton back, delete, sendPhoto, sendSound, send;
 	JLabel name;
 	JTextField text;
+	String ID;
+	int lastRead;
 
-	public TalkPage(Client cli, final String userID) {
+	public TalkPage(Client cli, final String userID, int reflush) {
+		this.ID = userID;
 		System.gc();
 		client = cli;
 		//heading
@@ -48,6 +51,7 @@ public class TalkPage extends JPanel {
 					return;
 				client.deleteAllRecordWith(userID);
 				client.ui.pop();
+				client.ui.push(new TalkPage(client, userID, -2));
 			}
 			
 		});
@@ -69,7 +73,9 @@ public class TalkPage extends JPanel {
 		});
 		//messages
 		int num = client.getNumberOfMessages(userID);
-		JPanel messagePanel = new JPanel(new GridLayout(num < 10 ? 10 : num, 1));
+		lastRead = client.getLastRead(userID, num, reflush);
+		JPanel messagePanel = new JPanel();
+		messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
 		JScrollPane screen = new JScrollPane(messagePanel);
 		screen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		//screen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -80,16 +86,20 @@ public class TalkPage extends JPanel {
 			boolean me = sentence.startsWith("0");
 			sentence = sentence.substring(1);
 			JPanel display = new JPanel(new FlowLayout(me ? FlowLayout.RIGHT : FlowLayout.LEFT));
-			display.setPreferredSize(new Dimension(UIDisplay.WIDTH - 30, (UIDisplay.HEIGHT - 150) / 10));
+			display.setSize(new Dimension(UIDisplay.WIDTH - 30, (UIDisplay.HEIGHT - 150) / 10));
 			JLabel image = new JLabel(new ImageIcon(client.getUserIcon
 					(me ? client.getCurUser() : client.getUserById(userID)).
 					getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
 			
-			JLabel say = new JLabel(sentence);
+			//TODO : with pictures
+			JTextArea say = new JTextArea(sentence);
+			if (sentence.length() > 30)
+			{
+				say.setLineWrap(true);
+				say.setSize(new Dimension(200, 30));
+			}
 			say.setOpaque(true);
-			say.setPreferredSize(new Dimension(say.getPreferredSize().width + 20, 30));
 			say.setBorder(BorderFactory.createRaisedBevelBorder());
-			say.setHorizontalAlignment(JLabel.CENTER);
 			if (!me)
 			{
 				say.setBackground(new Color(70, 190, 100));
@@ -103,16 +113,24 @@ public class TalkPage extends JPanel {
 				display.add(image);
 			}
 			messagePanel.add(display);
+			if (i == lastRead)
+			{
+				JPanel display2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+				JLabel line = new JLabel("---------------above is history records---------------");
+				line.setSize(new Dimension(UIDisplay.WIDTH - 30, 20));
+				display2.add(line);
+				messagePanel.add(display2);
+			}
 		}
-		JScrollBar jscrollBar = screen.getVerticalScrollBar();
-		jscrollBar.setValue(jscrollBar.getMaximum());
-		jscrollBar.setValue(jscrollBar.getMaximum());
-		for (int i = 0; i < 10 - num; ++i)
+		for (int i = 0; i < 9 - num; ++i)
 		{
 			JPanel display = new JPanel(new BorderLayout());
-			display.setSize(new Dimension(UIDisplay.WIDTH - 30, (UIDisplay.HEIGHT - 150) / 10));
+			display.setPreferredSize(new Dimension(UIDisplay.WIDTH - 30, (UIDisplay.HEIGHT - 150) / 10));
 			messagePanel.add(display);
 		}
+		screen.doLayout();
+		JScrollBar jscrollBar = screen.getVerticalScrollBar();
+		jscrollBar.setValue(jscrollBar.getMaximum());
 		//operations
 		JPanel operationPanel = new JPanel(new FlowLayout());
 		operationPanel.setPreferredSize(new Dimension(UIDisplay.WIDTH, 50 * 2));
@@ -137,7 +155,7 @@ public class TalkPage extends JPanel {
 				client.sendMessage(userID, text.getText());
 				text.setText("");
 				client.ui.pop();
-				client.ui.push(new TalkPage(client, userID));
+				client.ui.push(new TalkPage(client, userID, lastRead));
 			}
 			
 		});

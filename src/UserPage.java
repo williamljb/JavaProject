@@ -54,7 +54,7 @@ public class UserPage extends JPanel {
 				if (shouldBack)
 					client.ui.pop();
 				else
-					client.ui.push(client.ui.talkPage = new TalkPage(client, userID));
+					client.ui.push(client.ui.talkPage = new TalkPage(client, userID, -2));
 			}
 			
 		});

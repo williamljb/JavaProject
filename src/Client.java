@@ -12,9 +12,10 @@ public class Client {
 	String LastUserID;
 	HashSet<String> set;
 	String ids[];
-	ArrayList<String> friends, records;
-	final static String ipAddress = //"127.0.0.1";
-									"166.111.227.148";
+	ArrayList<String> friends, records, talkingQueue;
+	String[] requestids;
+	final static String ipAddress = "127.0.0.1";
+									//"166.111.227.148";
 	
 	public static void main(String args[]) throws Exception
 	{
@@ -72,14 +73,34 @@ public class Client {
 	}
 
 	public int personNumberTalkedToLocally() {
-		// TODO Auto-generated method stub
-		return 20;
+		int num = this.getNumberOfFriends(), ans = 0;
+		this.talkingQueue = new ArrayList<String>();
+		for (String s : this.friends)
+			this.talkingQueue.add(s.intern());
+		for (int i = num - 1; i >= 0; --i)
+			if (haveTalked(curUser.id, this.talkingQueue.get(i)))
+			{
+				String s = this.talkingQueue.get(i).intern();
+				this.talkingQueue.remove(i);
+				this.talkingQueue.add(s);
+				++ans;
+			}
+		return ans;
+	}
+
+	boolean haveTalked(String aID, String bID) {
+		return new File("database" + File.separator + aID + File.separator + bID + ".txt").exists();
 	}
 
 	public User getUserTalked(int order) {
-		// TODO Auto-generated method stub
 		//get the last order-th user that talked with current user
-		return new User();
+		User user = new User();
+		try {
+			this.communicator.getUser(this.talkingQueue.get(this.talkingQueue.size() - 1 - order), user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return user;
 	}
 
 	public ImageIcon getUserIcon(User curUser) {
@@ -107,7 +128,6 @@ public class Client {
 	}
 
 	public User getCurUser() {
-		// TODO Auto-generated method stub
 		return curUser;
 	}
 
@@ -177,17 +197,16 @@ public class Client {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		ids = set.toArray(new String[set.size()]);
+		requestids = set.toArray(new String[set.size()]);
 		return set.size();
 	}
 
 	public User getUserOfRequest(int i) {
 		User user = new User();
 		try {
-			this.communicator.getUser(ids[i], user);
+			this.communicator.getUser(requestids[i], user);
 			//System.out.println(user.id + " " + user.name);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return user;
@@ -197,7 +216,6 @@ public class Client {
 		try {
 			this.communicator.acceptRequest(userID, curUser.id);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -208,7 +226,6 @@ public class Client {
 			this.communicator.getUser(ids[i], user);
 			//System.out.println(user.id + " " + user.name);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return user;
@@ -242,20 +259,26 @@ public class Client {
 	}
 
 	public void deleteAllRecordWith(String userID) {
-		// TODO Auto-generated method stub
-		
+		File del = new File("database" + File.separator + curUser.id);
+		for (File f : del.listFiles())
+			f.delete();
+		del.delete();
 	}
 
 	public int getNumberOfMessages(String userID) {
 		records = new ArrayList<String>();
-		if (!new File("database" + File.separator + curUser.id + File.separator + userID + ".txt").exists())
-			return 0;
+		new File("database" + File.separator + curUser.id).mkdirs();
 		try {
+			if (!new File("database" + File.separator + curUser.id + File.separator + userID + ".txt").exists())
+				return 0;
 			FileReader fw = new FileReader("database" + File.separator + curUser.id + File.separator + userID + ".txt");
 			String buffer;
 			BufferedReader in = new BufferedReader(fw);
 			while ((buffer = in.readLine()) != null)
+			{
+				System.out.println(buffer);
 				records.add(buffer);
+			}
 			in.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -298,11 +321,12 @@ public class Client {
 		}
 	}
 
-	public String getConversation(User aID, User bID) {
-		String ans = "0";
+	public String getConversation(String aID, String bID) {
+		String ans = "1";
 		if (!new File("database" + File.separator + aID + File.separator + bID + ".txt").exists())
 			return ans;
 		try {
+			//System.out.println("ok");
 			FileReader fw = new FileReader("database" + File.separator + aID + File.separator + bID + ".txt");
 			String buffer;
 			BufferedReader in = new BufferedReader(fw);
@@ -313,5 +337,70 @@ public class Client {
 			e.printStackTrace();
 		}
 		return ans;
+	}
+
+	public int getLastRead(String userID, int last, int reflush) {
+		String ans = "-1";
+		try {
+			if (reflush == -2 && new File("database" + File.separator + curUser.id + File.separator + userID + ".last").exists())
+			{
+				FileReader fr = new FileReader("database" + File.separator + curUser.id + File.separator + userID + ".last");
+				BufferedReader in = new BufferedReader(fr);
+				ans = in.readLine();
+				in.close();
+			}
+			{
+				new File("database" + File.separator + curUser.id).mkdirs();
+				FileWriter fw = new FileWriter("database" + File.separator + curUser.id + File.separator + userID + ".last");
+				fw.write(last - 1 + "\n");
+				fw.close();
+			}
+			if (reflush != -2)
+				return reflush;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Integer.parseInt(ans);
+	}
+
+	public boolean getUnread(String userID) {
+		String ret;
+		try {
+			ret = this.communicator.getUnread(curUser.id, userID);
+			if (ret.equals(""))
+				return false;
+			//System.out.println(ret);
+			new File("database" + File.separator + curUser.id).mkdirs();
+			FileWriter fw = new FileWriter("database" + File.separator + curUser.id + File.separator + userID + ".txt", true);
+			for (String s : ret.split("\n"))
+				fw.write(s + "\n");
+			fw.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+
+	public void reflush() {
+		boolean flag = false;
+		this.getNumberOfFriends();
+		for (String s : this.friends)
+			if (this.getUnread(s))
+			{
+				flag = true;
+			}
+		if (flag)
+		{
+			if (ui.stack[ui.top - 1] instanceof MainPage)
+			{
+				((MainPage)ui.stack[ui.top - 1]).timer.stop();
+				ui.setPage(new MainPage(this));
+			}
+			if (ui.stack[ui.top - 1] instanceof TalkPage)
+			{
+				ui.pop();
+				ui.push(ui.talkPage = new TalkPage(this, ((TalkPage)ui.stack[ui.top - 1]).ID, ((TalkPage)ui.stack[ui.top - 1]).lastRead));
+			}
+		}
 	}
 }

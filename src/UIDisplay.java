@@ -11,7 +11,6 @@ public class UIDisplay {
 	JFrame mainFrame;
 	Client client;
 	LoginPage login;
-	MainPage mainPage;
 	RegisterPage registerPage;
 	FriendPage friendPage;
 	DiscoverPage discoverPage;
@@ -52,7 +51,11 @@ public class UIDisplay {
 
 	void setPage(JPanel page) {
 		while (top != 0)
+		{
+			if (stack[top - 1] instanceof MainPage)
+				((MainPage)stack[top - 1]).timer.stop();
 			this.mainFrame.remove(stack[--top]);
+		}
 		stack[top = 0] = page;
 		top++;
 		displayPage(page);
@@ -78,9 +81,16 @@ public class UIDisplay {
 	}
 	
 	void pop() {
+		if (stack[top - 1] instanceof MainPage)
+			((MainPage)stack[top - 1]).timer.stop();
 		this.mainFrame.remove(stack[top - 1]);
 		if (stack[top - 2] instanceof FriendPage)
 			stack[top - 2] = new FriendPage(client);
+		if (stack[top - 2] instanceof MainPage)
+		{
+			((MainPage)stack[top - 2]).timer.stop();
+			stack[top - 2] = new MainPage(client);
+		}
 		displayPage(stack[top - 2]);
 		--top;
 	}
