@@ -291,7 +291,7 @@ public class Client {
 			this.LastUserID = curUser.id;
 			//System.out.println(this.LastUserID);
 			communicator.logout(curUser.id);
-			communicator.savePic("database/" + curUser.id + ".jpg", "database/record/LastUser.jpg");
+			Communicator.savePic("database/" + curUser.id + ".jpg", "database/record/LastUser.jpg");
 			OutputStreamWriter tmp = new OutputStreamWriter(new FileOutputStream("database/record/LastUser.txt"));
 			tmp.write(this.LastUserID + "\n");
 			tmp.close();
@@ -393,13 +393,14 @@ public class Client {
 		{
 			if (ui.stack[ui.top - 1] instanceof MainPage)
 			{
-				((MainPage)ui.stack[ui.top - 1]).timer.stop();
+				//System.out.println("hihi");
 				ui.setPage(new MainPage(this));
 			}
 			if (ui.stack[ui.top - 1] instanceof TalkPage)
 			{
+				//System.out.println("hoho");
 				ui.pop();
-				ui.push(ui.talkPage = new TalkPage(this, ((TalkPage)ui.stack[ui.top - 1]).ID, ((TalkPage)ui.stack[ui.top - 1]).lastRead));
+				ui.push(ui.talkPage = new TalkPage(this, ((TalkPage)ui.stack[ui.top]).ID, ((TalkPage)ui.stack[ui.top]).lastRead));
 			}
 		}
 	}

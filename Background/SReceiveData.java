@@ -191,7 +191,7 @@ public class SReceiveData{
 		String from = in.next();
 		String to = in.next();
 		in.close();
-		return MessageMethods.CheckUnread(from, to);
+		return MessageMethods.CheckUnread(from, to, clientSocket);
 	}else if(this.command.equals("SENDMESSAGE")){
 		String from = in.next();
 		String to = in.next();

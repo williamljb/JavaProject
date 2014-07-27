@@ -33,7 +33,7 @@ public class Communicator {
 		if (ret.charAt(0) == '1')
 			return 1;
 		
-		this.savePic(imagePath, "./database/" + id + ".jpg");
+		Communicator.savePic(imagePath, "./database/" + id + ".jpg");
 		ImageSender test = new ImageSender("./database/" + id + ".jpg");
     	new Thread(test).start();
     	
@@ -94,8 +94,12 @@ public class Communicator {
 		return -1;
 	}
 	
-	public void savePic(String imagePath, String add) throws Exception{
-		ImageIO.write(ImageIO.read(new File(imagePath)), "jpg", new File(add));
+	public static void savePic(String imagePath, String add){
+		try {
+			ImageIO.write(ImageIO.read(new File(imagePath)), "jpg", new File(add));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
 	public int edit(String id, String name, String password, String imagePath) throws Exception {
@@ -107,7 +111,7 @@ public class Communicator {
 		if (ret.charAt(0) == '1')
 			return 1;
 		
-		this.savePic(imagePath, "./database/" + id + ".jpg");
+		Communicator.savePic(imagePath, "./database/" + id + ".jpg");
 		ImageSender test = new ImageSender("./database/" + id + ".jpg");
     	new Thread(test).start();
     	
@@ -193,6 +197,11 @@ public class Communicator {
 		out.println("SENDMESSAGE " + curID + " " + userID + " " + text);
 		out.flush();
 		in.readLine();
+		if (TalkPage.isHashCode(text) != 0)
+		{
+			ImageSender test = new ImageSender("database" + File.separator + text);
+	    	new Thread(test).start();
+		}
 	}
 
 	public String getUnread(String curID, String userID) throws Exception {
@@ -207,6 +216,11 @@ public class Communicator {
 		{
 			buffer = in.readLine();
 			ans = ans + buffer + "\n";
+			if (TalkPage.isHashCode(buffer) != 0)
+			{
+		    	ImageSender test = new ImageSender("database" + File.separator + buffer);
+		    	new Thread(test).start();
+			}
 		}
 		buffer = in.readLine();
 		System.out.println(ans);

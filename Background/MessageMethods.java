@@ -1,6 +1,7 @@
 package background;
 
 import java.io.*;
+import java.net.Socket;
 import java.util.*;
 
 class MessageMethods {
@@ -45,7 +46,7 @@ class MessageMethods {
 	}
 	
 	
-	static String CheckUnread(String fromID, String tgID){
+	static String CheckUnread(String fromID, String tgID, Socket socket){
 		
 		try{
 			File f = FileAccessor(fromID, tgID, "Check");
@@ -73,7 +74,14 @@ class MessageMethods {
 				
 				tmp = "";
 				for (int i = 0; i < urd.size(); ++i)
+				{
+					if (isHashCode(urd.get(i)) != 0)
+					{
+				    	ImageSender test = new ImageSender("data" + File.separator + urd.get(i), socket);
+				    	new Thread(test).start();
+					}
 					tmp = tmp + urd.get(i) + "\n";
+				}
 				
 				FileWriter fw = new FileWriter(f);
 				ArrayList<String> clean = new ArrayList<String>();
@@ -96,6 +104,11 @@ class MessageMethods {
 	static synchronized String SendMessage(String fromID, String toID, String text){
 		
 		try{
+			if (isHashCode(text) != 0)
+			{
+				ImageReceiver test = new ImageReceiver("data" + File.separator + text);
+				new Thread(test).start();
+			}
 			FileWriter fwu = new FileWriter(FileAccessor(toID, fromID, "Check"), true);
 			fwu.write("1" + text + "\n");
 			fwu.close();
@@ -108,6 +121,22 @@ class MessageMethods {
 		
 		
 		return "-1";
+	}
+
+
+	static int isHashCode(String sentence) {
+		if (sentence.length() < 3)
+			return 0;
+		int code = sentence.substring(3).hashCode();
+		if (Integer.parseInt(sentence.substring(0, 3)) == ((code % 1000 + 1000) % 1000))
+			return 1;
+		if (sentence.length() < 4)
+			return 0;
+		code = sentence.substring(4).hashCode();
+		if (Integer.parseInt(sentence.substring(0, 4)) == ((code % 10000 + 10000) % 10000))
+			return 2;
+		else
+			return 0;
 	}
 	
 	

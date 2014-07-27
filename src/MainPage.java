@@ -10,7 +10,7 @@ public class MainPage extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	Client client;
-	Timer timer;
+	static Timer timer;
 
 	public MainPage(Client cli) {
 		client = cli;
@@ -31,6 +31,12 @@ public class MainPage extends JPanel {
 			display.add("West", image);
 			String userName = client.getUserName(curTalked);
 			String lastSentence = client.getConversation(client.getCurUser().id, curTalked.id);
+			int tmp = TalkPage.isHashCode(lastSentence.substring(1));
+			if (tmp == 1)
+				lastSentence = lastSentence.charAt(0) + "[image]";
+			else
+				if (tmp == 2)
+					lastSentence = lastSentence.charAt(0) + "[sound]";
 			if (lastSentence.startsWith("0"))
 				lastSentence = "Me : " + lastSentence.substring(1);
 			else
