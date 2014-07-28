@@ -30,7 +30,7 @@ public class SeeRequestPage extends JPanel {
 			JPanel display = new JPanel(new BorderLayout());
 			display.setSize(new Dimension(UIDisplay.WIDTH, (UIDisplay.HEIGHT - 150) / 6));
 			curRequest = client.getUserOfRequest(i);
-			JLabel image = new JLabel(new ImageIcon(client.getUserIcon(curRequest).
+			JLabel image = new JLabel(new ImageIcon(client.getUserIcon(curRequest.id).
 					getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 			image.setBounds(0, 0, 100, 100);
 			//System.out.println(image.getWidth() + " " + image.getHeight());

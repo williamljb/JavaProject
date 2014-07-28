@@ -138,7 +138,7 @@ public class Communicator {
 		out.println("IDEXISTS " + userID);
 		out.flush();
 		String ret = in.readLine();
-		System.out.println(ret);
+		//System.out.println(ret);
 		if (ret.charAt(0) == '1')
 			return 1;
 		return -1;
@@ -196,6 +196,7 @@ public class Communicator {
 	public void sendMessage(String curID, String userID, String text) throws Exception {
 		out.println("SENDMESSAGE " + curID + " " + userID + " " + text);
 		out.flush();
+		System.out.println("communicator 199 : " + text);
 		in.readLine();
 		if (TalkPage.isHashCode(text) != 0)
 		{
@@ -205,6 +206,7 @@ public class Communicator {
 	}
 
 	public String getUnread(String curID, String userID) throws Exception {
+		String []b;
 		out.println("UNREAD " + curID + " " + userID);
 		out.flush();
 		String ans = "", buffer;
@@ -212,18 +214,76 @@ public class Communicator {
 		if (buffer.equals(""))
 			return "";
 		int num = Integer.parseInt(buffer);
+		b = new String[num];
 		for (int i = 0; i < num; ++i)
 		{
 			buffer = in.readLine();
 			ans = ans + buffer + "\n";
-			if (TalkPage.isHashCode(buffer) != 0)
+			b[i] = "";
+			if (TalkPage.isHashCode(buffer.substring(1)) != 0)
 			{
-		    	ImageSender test = new ImageSender("database" + File.separator + buffer);
-		    	new Thread(test).start();
+				b[i] = new String(buffer.substring(1).intern());
+				System.out.println("file : " + b[i]);
 			}
 		}
 		buffer = in.readLine();
-		System.out.println(ans);
+		System.out.println("ok");
+		for (int i = 0; i < num; ++i)
+			if (!b[i].equals(""))
+			{
+				//System.out.println("request file : " + b[i]);
+				ImageReceiver test = new ImageReceiver("database" + File.separator + b[i]);
+		    	Thread thread = new Thread(test);
+		    	thread.start();
+				out.println("SENDFILE " + b[i]);
+				out.flush();
+				//System.out.println("ok0");
+				in.readLine();
+				//System.out.println("ok1");
+				thread.join();
+			}
+		//System.out.println(ans);
+		return ans;
+	}
+
+	public String download(String curID, String userID) throws Exception {
+		String []b;
+		out.println("DOWNLOAD " + curID + " " + userID);
+		out.flush();
+		String ans = "", buffer;
+		buffer = in.readLine();
+		if (buffer.equals(""))
+			return "";
+		int num = Integer.parseInt(buffer);
+		b = new String[num];
+		for (int i = 0; i < num; ++i)
+		{
+			buffer = in.readLine();
+			ans = ans + buffer + "\n";
+			b[i] = "";
+			if (TalkPage.isHashCode(buffer.substring(1)) != 0)
+			{
+				b[i] = new String(buffer.substring(1).intern());
+				System.out.println("file : " + b[i]);
+			}
+		}
+		buffer = in.readLine();
+		System.out.println("ok");
+		for (int i = 0; i < num; ++i)
+			if (!b[i].equals(""))
+			{
+				//System.out.println("request file : " + b[i]);
+				ImageReceiver test = new ImageReceiver("database" + File.separator + b[i]);
+		    	Thread thread = new Thread(test);
+		    	thread.start();
+				out.println("SENDFILE " + b[i]);
+				out.flush();
+				//System.out.println("ok0");
+				in.readLine();
+				//System.out.println("ok1");
+				thread.join();
+			}
+		//System.out.println(ans);
 		return ans;
 	}
 }

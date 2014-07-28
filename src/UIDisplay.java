@@ -27,24 +27,11 @@ public class UIDisplay {
 	public void init() {
 		mainFrame = new JFrame();
 		this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.mainFrame.addWindowListener(new WindowListener(){
-			@Override
-			public void windowOpened(WindowEvent e) {}
+		this.mainFrame.addWindowListener(new WindowAdapter(){
 			@Override
 			public void windowClosing(WindowEvent e) {
 				client.logout();
 			}
-			@Override
-			public void windowClosed(WindowEvent e) {}
-			@Override
-			public void windowIconified(WindowEvent e) {}
-			@Override
-			public void windowDeiconified(WindowEvent e) {}
-			@Override
-			public void windowActivated(WindowEvent e) {}
-			@Override
-			public void windowDeactivated(WindowEvent e) {}
-			
 		});
 		this.setPage(login = new LoginPage(this.client));
 	}
@@ -71,22 +58,14 @@ public class UIDisplay {
 	}
 
 	void push(JPanel panel) {
-		this.mainFrame.remove(stack[top - 1]);
+		if (top > 0) this.mainFrame.remove(stack[top - 1]);
 		stack[top++] = panel;
-		if (stack[top - 1] instanceof FriendPage)
-			stack[top - 1] = new FriendPage(client);
 		displayPage(panel);
 	}
 	
 	void pop() {
-		this.mainFrame.remove(stack[top - 1]);
-		if (stack[top - 2] instanceof FriendPage)
-			stack[top - 2] = new FriendPage(client);
-		if (stack[top - 2] instanceof MainPage)
-		{
-			stack[top - 2] = new MainPage(client);
-		}
-		displayPage(stack[top - 2]);
+		if (top > 0) this.mainFrame.remove(stack[top - 1]);
+		if (top > 1) displayPage(stack[top - 2]);
 		--top;
 	}
 

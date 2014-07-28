@@ -56,7 +56,7 @@ public class FriendPage extends JPanel {
 			else
 			{
 				final User curFriend = client.getKthFriend(i);
-				JLabel image = new JLabel(new ImageIcon(client.getUserIcon(curFriend).getImage()
+				JLabel image = new JLabel(new ImageIcon(client.getUserIcon(curFriend.id).getImage()
 						.getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 				display.add("West", image);
 				JLabel name = new JLabel(client.getUserName(curFriend));

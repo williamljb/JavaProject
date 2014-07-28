@@ -6,6 +6,7 @@ public class ImageReceiver implements Runnable {
 	File receiveAddress;
 	ServerSocket server;
 	boolean shouldClose = false;
+	static boolean running = false;
 	
 	ImageReceiver(String add)
 	{
@@ -32,7 +33,6 @@ public class ImageReceiver implements Runnable {
                             try {
 								server.close();
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
                             break;
@@ -43,12 +43,20 @@ public class ImageReceiver implements Runnable {
             });
 
             th.run(); 
+            th.join();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (server != null)
+				try {
+					server.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
         }
     }
 
-    public void receiveFile(Socket socket) {
+	public void receiveFile(Socket socket) {
 
         byte[] inputByte = null;
         int length = 0;

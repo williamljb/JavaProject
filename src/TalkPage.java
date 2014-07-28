@@ -13,7 +13,7 @@ public class TalkPage extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	Client client;
-	JButton back, delete, sendPhoto, sendSound, send;
+	JButton back, delete, sendPhoto, sendSound, send, download;
 	JLabel name;
 	JTextField text;
 	String ID, sentence;
@@ -90,7 +90,7 @@ public class TalkPage extends JPanel {
 			JPanel display = new JPanel(new FlowLayout(me ? FlowLayout.RIGHT : FlowLayout.LEFT));
 			display.setSize(new Dimension(UIDisplay.WIDTH - 30, (UIDisplay.HEIGHT - 150) / 10));
 			JLabel image = new JLabel(new ImageIcon(client.getUserIcon
-					(me ? client.getCurUser() : client.getUserById(userID)).
+					(me ? client.getCurUser().id : userID).
 					getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
 			
 			int tmp = isHashCode(sentence);
@@ -206,11 +206,14 @@ public class TalkPage extends JPanel {
 		//operations
 		JPanel operationPanel = new JPanel(new FlowLayout());
 		operationPanel.setPreferredSize(new Dimension(UIDisplay.WIDTH, 50 * 2));
-		JPanel addition = new JPanel(new GridLayout(1, 2));
+		JPanel addition = new JPanel(new GridLayout(1, 3));
+		//addition.setPreferredSize(new Dimension(UIDisplay.WIDTH, 20));
 		sendPhoto = new JButton("Send Photo");
 		addition.add(sendPhoto);
 		sendSound = new JButton("Send Sound");
 		addition.add(sendSound);
+		download = new JButton("Download");
+		addition.add(download);
 		operationPanel.add(addition);
 		JPanel origin = new JPanel(new BorderLayout());
 		text = new JTextField(20);
@@ -223,6 +226,7 @@ public class TalkPage extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 	            capture();
+	            //System.out.println("talkpage 228 : here");
 			}
 
 			@Override
@@ -269,6 +273,16 @@ public class TalkPage extends JPanel {
 				text.setText("");
 				client.ui.pop();
 				client.ui.push(new TalkPage(client, userID, lastRead));
+			}
+			
+		});
+		download.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				client.download(userID);
+				client.ui.pop();
+				client.ui.push(new TalkPage(client, userID, -1));
 			}
 			
 		});

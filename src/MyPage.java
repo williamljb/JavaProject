@@ -48,7 +48,7 @@ public class MyPage extends JPanel {
 		conPanel.add(passConfirm);
 		//upload
 		upload = new JButton("Upload Image...");
-		image = new JLabel(new ImageIcon(client.getUserIcon(client.getCurUser()).
+		image = new JLabel(new ImageIcon(client.getUserIcon(client.getCurUser().id).
 				getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 		upload.addActionListener(new ActionListener(){
 

@@ -12,14 +12,18 @@ public class UserPage extends JPanel {
 	
 	Client client;
 	JButton send, operate, back;
+	String userID;
+	boolean shouldBack;
 
 	public UserPage(Client cli, final String userID, final boolean shouldBack) {
 		client = cli;
+		this.userID = userID;
+		this.shouldBack = shouldBack;
 		//info
 		JPanel display = new JPanel(new BorderLayout());
 		display.setPreferredSize(new Dimension(UIDisplay.WIDTH, (UIDisplay.HEIGHT - 150) / 6));
 		final User curTalked = client.getUserById(userID);
-		JLabel image = new JLabel(new ImageIcon(client.getUserIcon(curTalked).
+		JLabel image = new JLabel(new ImageIcon(client.getUserIcon(curTalked.id).
 				getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 		display.add("West", image);
 		String userName = client.getUserName(curTalked);

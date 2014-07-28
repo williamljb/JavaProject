@@ -26,7 +26,7 @@ public class MainPage extends JPanel {
 			JPanel display = new JPanel(new BorderLayout());
 			display.setPreferredSize(new Dimension(UIDisplay.WIDTH - 30, (UIDisplay.HEIGHT - 150) / 6));
 			final User curTalked = client.getUserTalked(i);
-			JLabel image = new JLabel(new ImageIcon(client.getUserIcon(curTalked).
+			JLabel image = new JLabel(new ImageIcon(client.getUserIcon(curTalked.id).
 					getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 			display.add("West", image);
 			String userName = client.getUserName(curTalked);
@@ -41,6 +41,8 @@ public class MainPage extends JPanel {
 				lastSentence = "Me : " + lastSentence.substring(1);
 			else
 				lastSentence = userName + " : " + lastSentence.substring(1);
+			if (client.lastUnRead(curTalked.id))
+				lastSentence = "UNREAD! " + lastSentence;
 			JLabel nameLabel = new JLabel(userName);
 			nameLabel.setFont(new Font("Dialog", 1, 15));
 			JPanel centerPanel = new JPanel(new GridLayout(2, 1));
@@ -82,12 +84,15 @@ public class MainPage extends JPanel {
 		this.setVisible(true);
 		this.setSize(UIDisplay.WIDTH, UIDisplay.HEIGHT);
 		//timer
-		timer = new Timer(1000, new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				client.reflush();
-			}
-		});
-		timer.start();
+		if (timer == null)
+		{
+			timer = new Timer(1000, new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					client.reflush();
+				}
+			});
+			timer.start();
+		}
 	}
 
 }

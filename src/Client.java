@@ -14,8 +14,8 @@ public class Client {
 	String ids[];
 	ArrayList<String> friends, records, talkingQueue;
 	String[] requestids;
-	final static String ipAddress = "127.0.0.1";
-									//"166.111.227.148";
+	final static String ipAddress = //"127.0.0.1";
+									"166.111.227.148";
 	
 	public static void main(String args[]) throws Exception
 	{
@@ -24,12 +24,16 @@ public class Client {
 	}
 
 	private void go() throws Exception {
+		try {
 		BufferedReader tmp = new BufferedReader(new InputStreamReader(new FileInputStream("database/record/LastUser.txt")));
 		this.LastUserID = tmp.readLine();
+		tmp.close();
+		} catch (FileNotFoundException e) {
+			this.LastUserID = "";
+		}
 		ui = new UIDisplay(this);
 		communicator = new Communicator();
 		ui.init();
-		tmp.close();
 	}
 
 	public ImageIcon getLastUserIcon() {
@@ -103,24 +107,15 @@ public class Client {
 		return user;
 	}
 
-	public ImageIcon getUserIcon(User curUser) {
-		String path = System.getProperty("user.dir") + "/database/" + curUser.id + ".jpg";
+	public ImageIcon getUserIcon(String id) {
+		String path = System.getProperty("user.dir") + "/database/" + id + ".jpg";
 		//System.out.println(path);
 		if (new File(path).exists())
 		{
 			//System.out.println("here");
 			return new ImageIcon(path);
 		}
-		else
-			try {
-				if (this.communicator.getUser(curUser.id, curUser) == -1)
-					return new ImageIcon(path);
-				else
-					return Client.getDefaultUserIcon();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		return Client.getDefaultUserIcon();
+		else return Client.getDefaultUserIcon();
 	}
 
 	public String getUserName(User curUser) {
@@ -259,9 +254,7 @@ public class Client {
 	}
 
 	public void deleteAllRecordWith(String userID) {
-		File del = new File("database" + File.separator + curUser.id);
-		for (File f : del.listFiles())
-			f.delete();
+		File del = new File("database" + File.separator + curUser.id + File.separator + userID + ".txt");
 		del.delete();
 	}
 
@@ -276,7 +269,7 @@ public class Client {
 			BufferedReader in = new BufferedReader(fw);
 			while ((buffer = in.readLine()) != null)
 			{
-				System.out.println(buffer);
+				//System.out.println(buffer);
 				records.add(buffer);
 			}
 			in.close();
@@ -389,19 +382,71 @@ public class Client {
 			{
 				flag = true;
 			}
+		if (ui.top > 0 && ui.stack[ui.top - 1] instanceof FriendPage)
+		{
+			ui.setPage(ui.friendPage = new FriendPage(this));
+		}
+		if (ui.top > 0 && ui.stack[ui.top - 1] instanceof UserPage)
+		{
+			//System.out.println("hihi");
+			ui.pop();
+			ui.push(ui.userPage = new UserPage(this, ((UserPage)ui.stack[ui.top]).userID, ((UserPage)ui.stack[ui.top]).shouldBack));
+		}
+		if (ui.top > 0 && ui.stack[ui.top - 1] instanceof MainPage)
+		{
+			//System.out.println("hihi");
+			ui.setPage(new MainPage(this));
+		}
 		if (flag)
 		{
-			if (ui.stack[ui.top - 1] instanceof MainPage)
-			{
-				//System.out.println("hihi");
-				ui.setPage(new MainPage(this));
-			}
-			if (ui.stack[ui.top - 1] instanceof TalkPage)
+			if (ui.top > 0 && ui.stack[ui.top - 1] instanceof TalkPage)
 			{
 				//System.out.println("hoho");
 				ui.pop();
 				ui.push(ui.talkPage = new TalkPage(this, ((TalkPage)ui.stack[ui.top]).ID, ((TalkPage)ui.stack[ui.top]).lastRead));
 			}
+		}
+	}
+
+	public void download(String userID) {
+		String ret;
+		try {
+			ret = this.communicator.download(curUser.id, userID);
+			new File("database" + File.separator + curUser.id).mkdirs();
+			FileWriter fw = new FileWriter("database" + File.separator + curUser.id + File.separator + userID + ".txt");
+			if (ret.equals(""))
+			{
+				fw.close();
+				return;
+			}
+			for (String s : ret.split("\n"))
+				fw.write(s + "\n");
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public boolean lastUnRead(String userID) {
+		try {
+			FileReader fl = new FileReader("database" + File.separator + curUser.id + File.separator + userID + ".last");
+			FileReader fr = new FileReader("database" + File.separator + curUser.id + File.separator + userID + ".txt");
+			BufferedReader in = new BufferedReader(fl);
+			String ans = in.readLine();
+			int last = Integer.parseInt(ans);
+			in.close();
+			in = new BufferedReader(fr);
+			while ((ans = in.readLine()) != null)
+				--last;
+			in.close();
+			System.out.println("client 444 : " + last);
+			return last != -1;
+		} catch (FileNotFoundException e) {
+			return true;
+		} catch (IOException e) {
+			return true;
 		}
 	}
 }
