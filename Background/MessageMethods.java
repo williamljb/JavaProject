@@ -75,11 +75,11 @@ class MessageMethods {
 				tmp = "";
 				for (int i = 0; i < urd.size(); ++i)
 				{
-					if (isHashCode(urd.get(i)) != 0)
+					/*if (isHashCode(urd.get(i)) != 0)
 					{
 				    	ImageSender test = new ImageSender("data" + File.separator + urd.get(i), socket);
 				    	new Thread(test).start();
-					}
+					}*/
 					tmp = tmp + urd.get(i) + "\n";
 				}
 				
@@ -128,6 +128,8 @@ class MessageMethods {
 		if (sentence.length() < 3)
 			return 0;
 		int code = sentence.substring(3).hashCode();
+		
+		try{
 		if (Integer.parseInt(sentence.substring(0, 3)) == ((code % 1000 + 1000) % 1000))
 			return 1;
 		if (sentence.length() < 4)
@@ -137,7 +139,70 @@ class MessageMethods {
 			return 2;
 		else
 			return 0;
+		}catch(NumberFormatException e){
+			return 0;
+		}
+		
 	}
 	
+	static String ReturnHistory(String fromID, String tgID, Socket socket){
+		
+		try{
+			File f = FileAccessor(fromID, tgID, "Send");
+			if(!f.exists())
+				return "";
+			else{
+				
+				FileReader fr = new FileReader(f);
+				BufferedReader br = new BufferedReader(fr);
+				ArrayList<String> urd = new ArrayList<String>();
+				String tmp = new String();
+				tmp = br.readLine();
+				if(tmp==null){
+					br.close();	
+					return "";
+				}
+				else{
+					while(tmp!=null){
+						urd.add(tmp);
+						tmp = br.readLine();
+					}
+					br.close();
+					tmp = "";
+				}
+				
+				tmp = "";
+				for (int i = 0; i < urd.size(); ++i)
+				{
+					/*if (isHashCode(urd.get(i)) != 0)
+					{
+				    	ImageSender test = new ImageSender("data" + File.separator + urd.get(i), socket);
+				    	new Thread(test).start();
+					}*/
+					tmp = tmp + urd.get(i) + "\n";
+				}
+				tmp = String.valueOf(urd.size()) + "\n" + tmp;
+				return tmp;
+			}
+		}catch(Exception e){
+			e.getStackTrace();
+			return "";
+		}
+	}
 	
+	static String SendFile(String filename, Socket socket){
+		
+		try{
+			System.out.println(filename + "@196.SendFile");
+			String get = new String("./data/" + filename);
+			ImageSender test = new ImageSender(get, socket);
+			new Thread(test).start();
+			
+			return "-1";
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return "1";
+		}
+	}
 }

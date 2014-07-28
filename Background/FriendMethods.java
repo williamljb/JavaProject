@@ -74,7 +74,7 @@ public class FriendMethods {
 		String fdList = "";
 			
 			try{
-				System.out.println("@77.FriendMethods.java");
+				//System.out.println("@77.FriendMethods.java");
 				File ft = new File("./data/" + ID + "/FriendList.txt");
 				FileReader fr = new FileReader(ft);
 				BufferedReader br = new BufferedReader(fr);

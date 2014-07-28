@@ -25,7 +25,7 @@ public class SReceiveData{
 		
 		this.command = in.next();
 		
-		System.out.println(this.command + " command @28.SReceiveData.java");
+		//System.out.println(this.command + " command @28.SReceiveData.java");
 		
 		if(this.command.equals("CREATE")){
 		
@@ -198,8 +198,20 @@ public class SReceiveData{
 		String text = source.substring(source.indexOf(' ') + 1);
 		text = text.substring(text.indexOf(' ') + 1);
 		text = text.substring(text.indexOf(' ') + 1);
+		System.out.println(text + "@201.SReceiveData");
 		in.close();
 		return MessageMethods.SendMessage(from, to, text);
+	}else if(this.command.equals("DOWNLOAD")){
+		System.out.println(this.command + " command @205.SReceiveData.java");
+		String from = in.next();
+		String to = in.next();
+		in.close();
+		return MessageMethods.ReturnHistory(from, to, clientSocket);
+	}else if(this.command.equals("SENDFILE")){
+		System.out.println(this.command + " command @211.SReceiveData.java");
+		String address = in.next();
+		in.close();
+		return MessageMethods.SendFile(address, clientSocket);
 	}
 		
 		in.close();
