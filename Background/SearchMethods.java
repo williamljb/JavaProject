@@ -46,13 +46,13 @@ public class SearchMethods {
     	BufferedReader br;
     	Pattern p;
     	if(key.equals("NoUse")){
-    		p = Pattern.compile("profile " + target);
-    		fr = new FileReader("./data/" + target + "/info.txt");
+    		p = Pattern.compile("profile " + target + " ");
+    		fr = new FileReader("./data" + File.separator + target + File.separator + "info.txt");
             br = new BufferedReader(fr);
     	}
     	else{
-    		p = Pattern.compile("profile " + target + key);
-    		fr = new FileReader("./data/" + target + "/info.txt");
+    		p = Pattern.compile("profile " + target + key + " ");
+    		fr = new FileReader("./data" + File.separator + target + File.separator + "info.txt");
     		br = new BufferedReader(fr);
     	}
     	
@@ -63,6 +63,7 @@ public class SearchMethods {
     do{
         
            charSet=br.readLine();
+           //System.out.println("Find: " + target + " password: " + key + "@ " + charSet);
         
            if(charSet==null){
         	   
@@ -94,7 +95,7 @@ String searchdata(String ID){
     	//File f = new File("data.txt");
     	Pattern p = Pattern.compile("profile " + ID);
     	Matcher search;
-    	FileReader fr = new FileReader("./data/" + ID + "/info.txt");
+    	FileReader fr = new FileReader("./data" + File.separator + ID + File.separator + "info.txt");
         BufferedReader br = new BufferedReader(fr);
         String charSet = new String();
     	System.out.println("GetUser 79@SearchMethods.java");
@@ -127,7 +128,7 @@ String searchdata(String ID){
 	String SearchOnline(String ID){
 		try{
 			
-			FileReader fr = new FileReader("./Online.txt");
+			FileReader fr = new FileReader("Online.txt");
 	    	BufferedReader br = new BufferedReader(fr);
 	    	Pattern p = Pattern.compile(ID);
 	    	Matcher search;

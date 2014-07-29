@@ -23,9 +23,9 @@ public class CreateAccount {
 		
 		try{
 			//System.out.println("25@CreateAccount.java");
-			new File("./data/" + ID).mkdirs();
-			File f = new File("./data/" + ID + "/info.txt");
-			FileWriter fw =(f.exists())?new FileWriter("./data/" + ID + "/info.txt",true):new FileWriter("./data/" + ID + "/info.txt");
+			new File("data" + File.separator + ID).mkdirs();
+			File f = new File("./data" + File.separator + ID + File.separator + "info.txt");
+			FileWriter fw =(f.exists())?new FileWriter("./data" + File.separator + ID + File.separator + "info.txt",true):new FileWriter("./data" + File.separator + ID + File.separator + "info.txt");
 			//System.out.println("29@CreateAccount.java");
 			SearchMethods find = new SearchMethods();
 			found = find.search(ID, "NoUse");
@@ -51,7 +51,7 @@ public class CreateAccount {
 		        //br.close();
 		        fw.close();
 				flag = -1;//Imply file write successed
-				ImageReceiver test = new ImageReceiver("./data/"+ ID + "/" + ID +".jpg");
+				ImageReceiver test = new ImageReceiver("./data" + File.separator + ID + File.separator + ID +".jpg");
 		    	new Thread(test).start();
 				return flag;
 			}

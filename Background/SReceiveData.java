@@ -2,6 +2,7 @@ package background;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.File;
 import java.net.*;
 
 //import javax.swing.ImageIcon;
@@ -76,7 +77,10 @@ public class SReceiveData{
 		boolean idExist;
 		
 		this.id = in.next();
-		this.password = in.next();
+		//this.password = in.next();
+		this.password = source.substring(source.indexOf(' ') + 1);
+		this.password = this.password.substring(this.password.indexOf(' ') + 1);
+		
 		
 		SearchMethods test = new SearchMethods();
 		idExist = test.search(this.id, "NoUse");
@@ -104,11 +108,12 @@ public class SReceiveData{
 		if(tmp.equals("1"))
 			return tmp;
 		else{
-			ImageSender test = new ImageSender("./data/"+ this.id + "/" + this.id + ".jpg", clientSocket);
+			ImageSender test = new ImageSender("data" + File.separator + this.id + File.separator + this.id + ".jpg", clientSocket);
 	    	new Thread(test).start();
 	    	return tmp;
 		}
 	}else if(this.command.equals("EDIT")){
+		System.out.println(this.command + " command @113.SReceiveData.java");
 		while(in.hasNext()){
 			
 			switch(in.next()){
@@ -178,6 +183,11 @@ public class SReceiveData{
 		String to = in.next();
 		in.close();
 		return new FriendMethods().AcceptFdRequest(from, to);	
+	}else if(this.command.equals("DECLINEREQUEST")){
+		String from = in.next();
+		String to = in.next();
+		in.close();
+		return new FriendMethods().DeclineFdRequest(from, to);
 	}else if(this.command.equals("FRIEND")){
 		this.id = in.next();
 		in.close();

@@ -37,11 +37,11 @@ class MessageMethods {
 	static synchronized File FileAccessor(String Host, String Guest, String command){
 		
 		if(command.equals("Check"))
-			return new File("./data/" + Host + "/" + Guest + "_UNREAD.txt");
+			return new File("./data" + File.separator + Host + File.separator + Guest + "_UNREAD.txt");
 		else if(command.equals("Send"))
-			return new File("./data/" + Host + "/" + Guest + "_HISTORY.txt");
+			return new File("./data" + File.separator + Host + File.separator + Guest + "_HISTORY.txt");
 		
-			return new File("./data/" + Host + "/null_HISTORY.txt");
+			return new File("./data" + File.separator + Host + File.separator + "null_HISTORY.txt");
 		
 	}
 	
@@ -194,7 +194,7 @@ class MessageMethods {
 		
 		try{
 			System.out.println(filename + "@196.SendFile");
-			String get = new String("./data/" + filename);
+			String get = new String("./data" + File.separator + filename);
 			ImageSender test = new ImageSender(get, socket);
 			new Thread(test).start();
 			

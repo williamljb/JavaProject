@@ -12,8 +12,8 @@ public class FriendMethods {
 	String SendFdRequest(String fromID, String toID){
 		
 		try{
-			File ft = new File("./data/" + toID + "/FdRequest.txt");
-			FileWriter fw =(ft.exists())? new FileWriter("./data/" + toID + "/FdRequest.txt", true): new FileWriter("./data/" + toID + "/FdRequest.txt");
+			File ft = new File("./data" + File.separator + toID + File.separator + "FdRequest.txt");
+			FileWriter fw =(ft.exists())? new FileWriter("./data" + File.separator + toID + File.separator + "FdRequest.txt", true): new FileWriter("./data" + File.separator + toID + File.separator + "FdRequest.txt");
 			fw.close();
 			FileReader fr = new FileReader(ft);
 			BufferedReader br = new BufferedReader(fr);
@@ -29,16 +29,52 @@ public class FriendMethods {
 				tmpString = "";
 			}
 			
-			fw = new FileWriter("./data/" + toID + "/FdRequest.txt");
+			fw = new FileWriter("./data" + File.separator + toID + File.separator + "FdRequest.txt");
 			fw.write(tmpString + fromID + " ");
 			
 			fw.close();
 			return "-1";
 		}catch(Exception e){
-			System.out.println("Error @.FriendMethods.java: " + e);
+			//System.out.println("Error @.FriendMethods.java: " + e);
 		}
 		
 		return "0";
+	}
+	
+	String DeclineFdRequest(String fromID, String toID){
+		try{
+			File fl = new File("./data" + File.separator + toID + File.separator + "FdRequest.txt");
+			FileReader fr = new FileReader(fl);
+			BufferedReader br = new BufferedReader(fr);
+			String tmpString = br.readLine();
+			br.close();
+			Scanner in = new Scanner(tmpString);
+			String tmpID;
+			ArrayList<String> tmp = new ArrayList<String>();
+			
+			while(in.hasNext()){
+				tmpID = in.next();
+				//System.out.println(tmpID + " @130.FriendMethods.java");
+				if(tmpID.equals(fromID)){
+					continue;
+				}
+				else{
+					tmp.add(tmpID + " ");
+				}
+				
+			}
+			in.close();
+			FileWriter fwl = new FileWriter("./data" + File.separator + toID + File.separator + "FdRequest.txt");
+			for(int i = 0 ; i< tmp.size() ; i++)
+				fwl.write(tmp.get(i));
+			fwl.close();
+			System.out.println("@71.FriendMethods.java");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return "0";
+		}
+		return "-1";
 	}
 	
 	String ReturnFdRequests(String ID){
@@ -47,7 +83,7 @@ public class FriendMethods {
 		
 		try{
 			System.out.println("@30.FriendMethods.java");
-			File ft = new File("./data/" + ID + "/FdRequest.txt");
+			File ft = new File("./data" + File.separator + ID + File.separator + "FdRequest.txt");
 			FileReader fr = new FileReader(ft);
 			BufferedReader br = new BufferedReader(fr);
 			requests = br.readLine();
@@ -75,7 +111,7 @@ public class FriendMethods {
 			
 			try{
 				//System.out.println("@77.FriendMethods.java");
-				File ft = new File("./data/" + ID + "/FriendList.txt");
+				File ft = new File("./data" + File.separator + ID + File.separator + "FriendList.txt");
 				FileReader fr = new FileReader(ft);
 				BufferedReader br = new BufferedReader(fr);
 				fdList = br.readLine();
@@ -91,7 +127,7 @@ public class FriendMethods {
 					return "";
 				
 			}catch(Exception e){
-				System.out.println("Error @93.FriendMethods.java");
+				//System.out.println("Error @93.FriendMethods.java");
 			}
 			
 			return fdList;
@@ -109,12 +145,12 @@ public class FriendMethods {
 		System.out.println("AddFriend from: " + fromID + " to: " + toID + " @109.FriendMethods.java");
 		
 		try{
-			File fl = new File("./data/" + toID + "/FdRequest.txt");
-			File ff = new File("./data/" + fromID + "/FriendList.txt");
-			File ft = new File("./data/" + toID + "/FriendList.txt");
+			File fl = new File("./data" + File.separator + toID + File.separator + "FdRequest.txt");
+			File ff = new File("./data" + File.separator + fromID + File.separator + "FriendList.txt");
+			File ft = new File("./data" + File.separator + toID + File.separator + "FriendList.txt");
 			
-			FileWriter fwf =(ff.exists())?new FileWriter("./data/" + fromID + "/FriendList.txt",true):new FileWriter("./data/" + fromID + "/FriendList.txt");
-			FileWriter fwt =(ft.exists())?new FileWriter("./data/" + toID + "/FriendList.txt",true):new FileWriter("./data/" + toID + "/FriendList.txt");
+			FileWriter fwf =(ff.exists())?new FileWriter("./data" + File.separator + fromID + File.separator + "FriendList.txt",true):new FileWriter("./data" + File.separator + fromID + File.separator + "FriendList.txt");
+			FileWriter fwt =(ft.exists())?new FileWriter("./data" + File.separator + toID + File.separator + "FriendList.txt",true):new FileWriter("./data" + File.separator + toID + File.separator + "FriendList.txt");
 			FileReader fr = new FileReader(fl);
 			BufferedReader br = new BufferedReader(fr);
 			tmpString = br.readLine();
@@ -137,7 +173,7 @@ public class FriendMethods {
 				
 			}
 			in.close();
-			FileWriter fwl = new FileWriter("./data/" + toID + "/FdRequest.txt");
+			FileWriter fwl = new FileWriter("./data" + File.separator + toID + File.separator + "FdRequest.txt");
 			for(int i = 0 ; i< tmp.size() ; i++)
 				fwl.write(tmp.get(i));
 			fwl.close();
@@ -165,8 +201,8 @@ public class FriendMethods {
 		System.out.println("DeleteFriend from: " + fromID + " to: " + toID + " @157.FriendMethods.java");
 		
 		try{
-			File ff = new File("./data/" + fromID + "/FriendList.txt");
-			File ft = new File("./data/" + toID + "/FriendList.txt");
+			File ff = new File("./data" + File.separator + fromID + File.separator + "FriendList.txt");
+			File ft = new File("./data" + File.separator + toID + File.separator + "FriendList.txt");
 			if(!ff.exists()||!ft.exists())
 				return "1";//Fail
 			
@@ -223,8 +259,8 @@ public class FriendMethods {
 			if(tmpf.contains(toID)||tmpt.contains(fromID))
 				return "1";
 			
-			FileWriter fwf = new FileWriter("./data/" + fromID + "/FriendList.txt");
-			FileWriter fwt = new FileWriter("./data/" + toID + "/FriendList.txt");
+			FileWriter fwf = new FileWriter("./data" + File.separator + fromID + File.separator + "FriendList.txt");
+			FileWriter fwt = new FileWriter("./data" + File.separator + toID + File.separator + "FriendList.txt");
 			
 			for(int i = 0 ; i< tmpf.size() ; i++)
 				fwf.write(tmpf.get(i));

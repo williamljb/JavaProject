@@ -16,7 +16,7 @@ public class EditAccount {
 		try{
 		
 			
-				FileWriter fw = new FileWriter("./data/" + ID + "/info.txt");
+				FileWriter fw = new FileWriter("./data" + File.separator + ID + File.separator + "info.txt");
 				fw.write("profile "+ ID + " key " + password + " nickname " + nickname + " Unread " + unread 
    		        		+ " friend " + friendList + "\n");  
    		        fw.flush();
@@ -25,7 +25,7 @@ public class EditAccount {
    		        System.out.println("70@EditAccount.java");
 				flag = -1;//Imply file rewrite successed
 				//new File("./" + ID).mkdir();
-				ImageReceiver test = new ImageReceiver("./data/"+ ID + "/" + ID +".jpg");
+				ImageReceiver test = new ImageReceiver("./data" + File.separator + ID + File.separator + ID +".jpg");
 		    	new Thread(test).start();
 		    	System.out.println("75@EditAccount.java");
 		    	return flag;
