@@ -63,6 +63,8 @@ public class Client {
 			if (ret == -1)
 			{
 				this.communicator.getUser(userID, curUser);
+				if (!new File("database" + SEP + curUser.id).exists())
+					new File("database" + SEP + curUser.id).mkdirs();
 				for (File f : new File("database" + SEP + curUser.id).listFiles())
 					if (f.isFile())
 					{
@@ -416,6 +418,10 @@ public class Client {
 		if (ui.top > 0 && ui.stack[ui.top - 1] instanceof FriendPage)
 		{
 			ui.setPage(ui.friendPage = new FriendPage(this));
+		}
+		if (ui.top > 0 && ui.stack[ui.top - 1] instanceof DiscoverPage)
+		{
+			ui.setPage(ui.discoverPage = new DiscoverPage(this));
 		}
 		if (ui.top > 0 && ui.stack[ui.top - 1] instanceof UserPage)
 		{
