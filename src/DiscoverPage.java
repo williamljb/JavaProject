@@ -16,15 +16,19 @@ public class DiscoverPage extends JPanel {
 		//main
 		JLabel pending = new JLabel("Pending...");
 		pending.setFont(new Font("Dialog", 1, 30));
-		pending.setPreferredSize(new Dimension(UIDisplay.WIDTH, UIDisplay.HEIGHT - 150));
+		pending.setPreferredSize(new Dimension(UIDisplay.WIDTH, UIDisplay.HEIGHT - 200));
 		pending.setHorizontalAlignment(JLabel.CENTER);;
 		//Buttons
 		MenuButton menu = new MenuButton(client, 2);
+		//personal info
+		PersonalInfo info = new PersonalInfo(client);
 		//join together
+		this.add("North", info);
 		this.add("Center", pending);
 		this.add("South", menu);
 		this.setVisible(true);
 		this.setSize(UIDisplay.WIDTH, UIDisplay.HEIGHT);
+		this.setOpaque(false);
 	}
 
 }

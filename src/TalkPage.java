@@ -13,7 +13,7 @@ public class TalkPage extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	Client client;
-	JButton back, delete, sendPhoto, sendSound, send, download;
+	JButton back, delete, sendPhoto, sendSound, send, download, capture;
 	JLabel name;
 	JTextField text;
 	String ID, sentence;
@@ -29,10 +29,12 @@ public class TalkPage extends JPanel {
 
 	public TalkPage(Client cli, final String userID, int reflush) {
 		this.ID = userID;
+		this.setOpaque(false);
 		System.gc();
 		client = cli;
 		//heading
 		JPanel headPanel = new JPanel(new BorderLayout());
+		headPanel.setOpaque(false);
 		back = new JButton("Back");
 		delete = new JButton("Clear");
 		name = new JLabel(client.getUserName(client.getUserById(userID)));
@@ -76,11 +78,14 @@ public class TalkPage extends JPanel {
 		int num = client.getNumberOfMessages(userID);
 		lastRead = client.getLastRead(userID, num, reflush);
 		JPanel messagePanel = new JPanel();
+		messagePanel.setOpaque(false);
 		messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
 		JScrollPane screen = new JScrollPane(messagePanel);
 		screen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		//screen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		screen.setPreferredSize(new Dimension(UIDisplay.WIDTH - 50, UIDisplay.HEIGHT - 50 * 3));
+		screen.getViewport().setOpaque(false);
+		screen.setOpaque(false);
 		int end = 9 - num;
 		for (int i = 0; i < num; ++i)
 		{
@@ -88,6 +93,7 @@ public class TalkPage extends JPanel {
 			boolean me = sentence.startsWith("0");
 			sentence = sentence.substring(1);
 			JPanel display = new JPanel(new FlowLayout(me ? FlowLayout.RIGHT : FlowLayout.LEFT));
+			display.setOpaque(false);
 			display.setSize(new Dimension(UIDisplay.WIDTH - 30, (UIDisplay.HEIGHT - 150) / 10));
 			JLabel image = new JLabel(new ImageIcon(client.getUserIcon
 					(me ? client.getCurUser().id : userID).
@@ -188,6 +194,7 @@ public class TalkPage extends JPanel {
 			if (i == lastRead)
 			{
 				JPanel display2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+				display2.setOpaque(false);
 				JLabel line = new JLabel("---------------Above are history records---------------");
 				line.setSize(new Dimension(UIDisplay.WIDTH - 30, 20));
 				display2.add(line);
@@ -197,6 +204,7 @@ public class TalkPage extends JPanel {
 		for (int i = 0; i < end; ++i)
 		{
 			JPanel display = new JPanel(new BorderLayout());
+			display.setOpaque(false);
 			display.setPreferredSize(new Dimension(UIDisplay.WIDTH - 30, (UIDisplay.HEIGHT - 150) / 10));
 			messagePanel.add(display);
 		}
@@ -205,22 +213,45 @@ public class TalkPage extends JPanel {
 		jscrollBar.setValue(jscrollBar.getMaximum());
 		//operations
 		JPanel operationPanel = new JPanel(new FlowLayout());
+		operationPanel.setOpaque(false);
 		operationPanel.setPreferredSize(new Dimension(UIDisplay.WIDTH, 50 * 2));
-		JPanel addition = new JPanel(new GridLayout(1, 3));
-		//addition.setPreferredSize(new Dimension(UIDisplay.WIDTH, 20));
+		JPanel addition = new JPanel(new GridLayout(1, 4));
+		addition.setOpaque(false);
+		addition.setPreferredSize(new Dimension(UIDisplay.WIDTH - 50, 20));
 		sendPhoto = new JButton("Send Photo");
 		addition.add(sendPhoto);
 		sendSound = new JButton("Send Sound");
 		addition.add(sendSound);
+		capture = new JButton("Capture");
+		addition.add(capture);
 		download = new JButton("Download");
 		addition.add(download);
 		operationPanel.add(addition);
 		JPanel origin = new JPanel(new BorderLayout());
+		origin.setOpaque(false);
 		text = new JTextField(20);
 		origin.add("Center", text);
 		send = new JButton("Send");
 		origin.add("East", send);
 		operationPanel.add(origin);
+		capture.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ScreenCapture.go();
+				File file = new File("database" + File.separator + "temp.png");
+				String hash = getHashCode(file);
+				int k = (hash.hashCode() % 1000 + 1000) % 1000;
+				String mess = String.valueOf(k) + hash;
+				if (k < 10) mess = "0" + mess;
+				if (k < 100) mess = "0" + mess;
+				Communicator.savePic(file.getPath(), "database" + File.separator + mess);
+				client.sendMessage(userID, mess);
+				client.ui.pop();
+				client.ui.push(new TalkPage(client, userID, lastRead));
+			}
+			
+		});
 		sendSound.addMouseListener(new MouseAdapter(){
 
 			@Override

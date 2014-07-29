@@ -15,19 +15,24 @@ public class SeeRequestPage extends JPanel {
 	User curRequest;
 
 	public SeeRequestPage(Client cli) {
+		this.setOpaque(false);
 		client = cli;
 		this.setLayout(new BorderLayout());
 		//list
 		int num = client.getNumberOfRequest();
 		JPanel mainScreen = new JPanel(new GridLayout(num < 6 ? 6 : num, 1));
+		mainScreen.setOpaque(false);
 		JScrollPane screen = new JScrollPane(mainScreen);
 		screen.setPreferredSize(new Dimension(UIDisplay.WIDTH, UIDisplay.HEIGHT - 200));
 		screen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		screen.getViewport().setOpaque(false);
+		screen.setOpaque(false);
 		//System.out.println(num);
 		for (int i = 0; i < num; ++i)
 		{
 			//System.out.println("in showing page");
 			JPanel display = new JPanel(new BorderLayout());
+			display.setOpaque(false);
 			display.setSize(new Dimension(UIDisplay.WIDTH, (UIDisplay.HEIGHT - 150) / 6));
 			curRequest = client.getUserOfRequest(i);
 			JLabel image = new JLabel(new ImageIcon(client.getUserIcon(curRequest.id).
@@ -38,9 +43,12 @@ public class SeeRequestPage extends JPanel {
 			JLabel userName = new JLabel(client.getUserName(curRequest));
 			userName.setFont(new Font("Dialog", 1, 20));
 			display.add("Center", userName);
-			JPanel buttons = new JPanel(new GridLayout(2, 1));
-			final JButton accept = new JButton("Accept"), profile = new JButton("Profile");
+			JPanel buttons = new JPanel(new GridLayout(3, 1));
+			buttons.setOpaque(false);
+			final JButton accept = new JButton("Accept"), decline = new JButton("Decline"), 
+					profile = new JButton("Profile");
 			buttons.add(accept);
+			buttons.add(decline);
 			buttons.add(profile);
 			display.add("East", buttons);
 			mainScreen.add(display);
@@ -51,6 +59,17 @@ public class SeeRequestPage extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					client.acceptRequestWith(client.requestids[number]);
 					accept.setEnabled(false);
+					decline.setEnabled(false);
+				}
+				
+			});
+			decline.addActionListener(new ActionListener(){
+				int number = order;
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					client.declineRequestWith(client.requestids[number]);
+					accept.setEnabled(false);
+					decline.setEnabled(false);
 				}
 				
 			});
@@ -66,12 +85,14 @@ public class SeeRequestPage extends JPanel {
 		for (int i = 0; i < 6 - num; ++i)
 		{
 			JPanel display = new JPanel(new BorderLayout());
+			display.setOpaque(false);
 			display.setSize(new Dimension(UIDisplay.WIDTH, (UIDisplay.HEIGHT - 150) / 6));
 			mainScreen.add(display);
 		}
 		//back
 		back = new JButton("Back");
 		JPanel backPanel = new JPanel(new FlowLayout());
+		backPanel.setOpaque(false);
 		backPanel.add(back);
 		backPanel.setPreferredSize(new Dimension(200, 60));
 		back.addActionListener(new ActionListener(){

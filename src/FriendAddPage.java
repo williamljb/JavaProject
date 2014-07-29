@@ -16,19 +16,23 @@ public class FriendAddPage extends JPanel {
 	JLabel title;
 
 	public FriendAddPage(Client cli) {
+		this.setOpaque(false);
 		client = cli;
 		//search label
 		title = new JLabel("Search Friends");
 		title.setFont(new Font("Dialog", 1, 20));
 		JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		titlePanel.setOpaque(false);
 		titlePanel.add(title);
 		//input
 		JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		inputPanel.setOpaque(false);
 		inputPanel.add(new JLabel("Search ID: "));
 		inputID = new JTextField(15);
 		inputPanel.add(inputID);
 		//button
 		JPanel buttonPanel = new JPanel(new GridLayout(1, 3));
+		buttonPanel.setOpaque(false);
 		checkAndAdd = new JButton("Check Profile");
 		back = new JButton("Back");
 		seeRequest = new JButton("See Request");

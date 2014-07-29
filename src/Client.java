@@ -14,18 +14,24 @@ public class Client {
 	String ids[];
 	ArrayList<String> friends, records, talkingQueue;
 	String[] requestids;
-	final static String ipAddress = //"127.0.0.1";
-									"166.111.227.148";
+	static String ipAddress;//"127.0.0.1";
+									//"166.111.227.148";
+	final static String SEP = File.separator;
+	HashSet<String> unreadMessage;
 	
 	public static void main(String args[]) throws Exception
 	{
+		BufferedReader tmp = new BufferedReader(new InputStreamReader(new FileInputStream("database"+SEP+"record"+SEP+"config.txt")));
+		ipAddress = tmp.readLine();
+		tmp.close();
 		Client client = new Client();
 		client.go();
 	}
 
 	private void go() throws Exception {
+		unreadMessage = new HashSet<String>();
 		try {
-		BufferedReader tmp = new BufferedReader(new InputStreamReader(new FileInputStream("database/record/LastUser.txt")));
+		BufferedReader tmp = new BufferedReader(new InputStreamReader(new FileInputStream("database"+SEP+"record"+SEP+"LastUser.txt")));
 		this.LastUserID = tmp.readLine();
 		tmp.close();
 		} catch (FileNotFoundException e) {
@@ -37,7 +43,7 @@ public class Client {
 	}
 
 	public ImageIcon getLastUserIcon() {
-		return new ImageIcon("database/record/LastUser.jpg");
+		return new ImageIcon("database"+SEP+"record"+SEP+"LastUser.jpg");
 	}
 
 	public String getLastUserID() {
@@ -45,7 +51,7 @@ public class Client {
 	}
 
 	public static ImageIcon getDefaultUserIcon() {
-		return new ImageIcon(new ImageIcon("resources/icons/default.png").
+		return new ImageIcon(new ImageIcon("resources"+SEP+"icons"+SEP+"default.png").
 				getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
 	}
 
@@ -55,7 +61,22 @@ public class Client {
 		try {
 			ret = this.communicator.login(userID, password);
 			if (ret == -1)
+			{
 				this.communicator.getUser(userID, curUser);
+				for (File f : new File("database" + SEP + curUser.id).listFiles())
+					if (f.isFile())
+					{
+						String name = f.getName();
+						if (name.substring(name.indexOf(".") + 1).equals("last"))
+							continue;
+						name = name.substring(0, name.indexOf("."));
+						if (this.lastUnRead(name))
+						{
+							System.out.println("clinet 75 " + name);
+							this.unreadMessage.add(name);
+						}
+					}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -108,7 +129,7 @@ public class Client {
 	}
 
 	public ImageIcon getUserIcon(String id) {
-		String path = System.getProperty("user.dir") + "/database/" + id + ".jpg";
+		String path = "database"+SEP + id + ".jpg";
 		//System.out.println(path);
 		if (new File(path).exists())
 		{
@@ -214,6 +235,14 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+	
+	public void declineRequestWith(String userID) {
+		try {
+			this.communicator.declineRequest(userID, curUser.id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public User getKthFriend(int i) {
 		User user = new User();
@@ -281,11 +310,12 @@ public class Client {
 
 	public void logout() {
 		try {
+			this.unreadMessage.removeAll(unreadMessage);
 			this.LastUserID = curUser.id;
 			//System.out.println(this.LastUserID);
 			communicator.logout(curUser.id);
-			Communicator.savePic("database/" + curUser.id + ".jpg", "database/record/LastUser.jpg");
-			OutputStreamWriter tmp = new OutputStreamWriter(new FileOutputStream("database/record/LastUser.txt"));
+			Communicator.savePic("database"+SEP + curUser.id + ".jpg", "database"+SEP+"record"+SEP+"LastUser.jpg");
+			OutputStreamWriter tmp = new OutputStreamWriter(new FileOutputStream("database"+SEP+"record"+SEP+"LastUser.txt"));
 			tmp.write(this.LastUserID + "\n");
 			tmp.close();
 		} catch (Exception e) {
@@ -381,6 +411,7 @@ public class Client {
 			if (this.getUnread(s))
 			{
 				flag = true;
+				this.unreadMessage.add(s);
 			}
 		if (ui.top > 0 && ui.stack[ui.top - 1] instanceof FriendPage)
 		{
@@ -441,7 +472,7 @@ public class Client {
 			while ((ans = in.readLine()) != null)
 				--last;
 			in.close();
-			System.out.println("client 444 : " + last);
+			//System.out.println("client 444 : " + last);
 			return last != -1;
 		} catch (FileNotFoundException e) {
 			return true;
@@ -449,4 +480,13 @@ public class Client {
 			return true;
 		}
 	}
+
+	public boolean hasUnread() {
+		return this.unreadMessage.size() != 0;
+	}
+
+	public boolean hasRequest() {
+		return this.getNumberOfRequest() != 0;
+	}
+
 }

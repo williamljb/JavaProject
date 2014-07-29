@@ -32,6 +32,7 @@ public class LoginPage extends JPanel{
 		JPanel idPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		idPanel.add(new JLabel("UserID:"));
 		idPanel.add(idInput);
+		idPanel.setOpaque(false);
 		idInput.getDocument().addDocumentListener(new DocumentListener(){
 
 			@Override
@@ -52,6 +53,7 @@ public class LoginPage extends JPanel{
 		JPanel passPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		passPanel.add(new JLabel("Password:"));
 		passPanel.add(password);
+		passPanel.setOpaque(false);
 		password.addKeyListener(new KeyListener(){
 
 			@Override
@@ -70,6 +72,7 @@ public class LoginPage extends JPanel{
 		JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
 		buttonPanel.add(login);
 		buttonPanel.add(register);
+		buttonPanel.setOpaque(false);
 		login.addActionListener(new ActionListener(){
 
 			@Override
@@ -115,5 +118,8 @@ public class LoginPage extends JPanel{
 		infoPanel.add(passPanel);
 		infoPanel.add(buttonPanel);
 		this.add(infoPanel);
+		this.setOpaque(false);
+		iconPanel.setOpaque(false);
+		infoPanel.setOpaque(false);
 	}
 }

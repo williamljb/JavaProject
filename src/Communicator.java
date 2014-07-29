@@ -2,12 +2,11 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import javax.imageio.*;
-
 public class Communicator {
 	PrintWriter out;
 	BufferedReader in;
 	boolean serverNotFound = false;
+	final static String SEP = File.separator; 
 	
 	Communicator()
 	{
@@ -33,8 +32,8 @@ public class Communicator {
 		if (ret.charAt(0) == '1')
 			return 1;
 		
-		Communicator.savePic(imagePath, "./database/" + id + ".jpg");
-		ImageSender test = new ImageSender("./database/" + id + ".jpg");
+		Communicator.savePic(imagePath, "database"+SEP + id + ".jpg");
+		ImageSender test = new ImageSender("database"+SEP + id + ".jpg");
     	new Thread(test).start();
     	
 		return -1;
@@ -44,6 +43,7 @@ public class Communicator {
 		if (this.serverNotFound)
 			return 0;
 		out.println("LOGIN " + userID + " " + password);
+		System.out.println("communicator 46 " + password);
 		out.flush();
 		String ret = in.readLine();
 		if (ret.charAt(0) == '1')
@@ -54,7 +54,7 @@ public class Communicator {
 	}
 
 	public int getUser(String userID, User user) throws Exception {
-    	ImageReceiver test = new ImageReceiver("./database/" + userID + ".jpg");
+    	ImageReceiver test = new ImageReceiver("database"+SEP + userID + ".jpg");
     	Thread send = new Thread(test);
     	send.start();
     	
@@ -95,10 +95,34 @@ public class Communicator {
 	}
 	
 	public static void savePic(String imagePath, String add){
+		if (imagePath.equals(add.intern()))
+			return;
+		DataInputStream dis = null;
+		FileOutputStream fos = null;
 		try {
-			ImageIO.write(ImageIO.read(new File(imagePath)), "jpg", new File(add));
+			dis = new DataInputStream(new FileInputStream(imagePath));
+			fos = new FileOutputStream(add);
+			byte[] inputByte = new byte[1024];
+	        int length = 0;
+            while ((length = dis.read(inputByte, 0, inputByte.length)) > 0) {
+                fos.write(inputByte, 0, length);
+                fos.flush();
+            }
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if (fos != null)
+				try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            if (dis != null)
+				try {
+					dis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
     }
 
@@ -110,9 +134,9 @@ public class Communicator {
 		String ret = in.readLine();
 		if (ret.charAt(0) == '1')
 			return 1;
-		
-		Communicator.savePic(imagePath, "./database/" + id + ".jpg");
-		ImageSender test = new ImageSender("./database/" + id + ".jpg");
+		System.out.println("communicator 114");
+		Communicator.savePic(imagePath, "database"+SEP + id + ".jpg");
+		ImageSender test = new ImageSender("database"+SEP + id + ".jpg");
     	new Thread(test).start();
     	
 		return -1;
@@ -169,6 +193,12 @@ public class Communicator {
 		out.flush();
 		in.readLine();
 	}
+	
+	public void declineRequest(String curID, String userID) throws Exception {
+		out.println("DECLINEREQUEST " + curID + " " + userID);
+		out.flush();
+		in.readLine();
+	}
 
 	public void friend(ArrayList<String> friends, String userID) throws Exception {
 		out.println("FRIEND " + userID);
@@ -196,7 +226,7 @@ public class Communicator {
 	public void sendMessage(String curID, String userID, String text) throws Exception {
 		out.println("SENDMESSAGE " + curID + " " + userID + " " + text);
 		out.flush();
-		System.out.println("communicator 199 : " + text);
+		//System.out.println("communicator 199 : " + text);
 		in.readLine();
 		if (TalkPage.isHashCode(text) != 0)
 		{
@@ -223,11 +253,11 @@ public class Communicator {
 			if (TalkPage.isHashCode(buffer.substring(1)) != 0)
 			{
 				b[i] = new String(buffer.substring(1).intern());
-				System.out.println("file : " + b[i]);
+				//System.out.println("file : " + b[i]);
 			}
 		}
 		buffer = in.readLine();
-		System.out.println("ok");
+		//System.out.println("ok");
 		for (int i = 0; i < num; ++i)
 			if (!b[i].equals(""))
 			{
@@ -264,11 +294,11 @@ public class Communicator {
 			if (TalkPage.isHashCode(buffer.substring(1)) != 0)
 			{
 				b[i] = new String(buffer.substring(1).intern());
-				System.out.println("file : " + b[i]);
+				//System.out.println("file : " + b[i]);
 			}
 		}
 		buffer = in.readLine();
-		System.out.println("ok");
+		//System.out.println("ok");
 		for (int i = 0; i < num; ++i)
 			if (!b[i].equals(""))
 			{
@@ -286,4 +316,5 @@ public class Communicator {
 		//System.out.println(ans);
 		return ans;
 	}
+
 }

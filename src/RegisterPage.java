@@ -3,6 +3,7 @@ import javax.swing.filechooser.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 
 
 public class RegisterPage extends JPanel {
@@ -14,35 +15,42 @@ public class RegisterPage extends JPanel {
 	Client client;
 	JTextField id, name;
 	JPasswordField password, passConfirm;
-	JButton upload, register;
+	JButton upload, register, back;
 	JLabel title, image;
-	String imagePath = "resources/icons/2.png";
+	final static String SEP = File.separator;
+	String imagePath = "resources"+SEP+"icons"+SEP+"2.png";
 
 	public RegisterPage(Client cli) {
+		this.setOpaque(false);
 		client = cli;
 		//register label
 		title = new JLabel("Register");
 		title.setFont(new Font("Dialog", 1, 20));
 		JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		titlePanel.setOpaque(false);
 		titlePanel.add(title);
 		//id field
 		id = new JTextField(15);
 		JPanel idPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		idPanel.setOpaque(false);
 		idPanel.add(new JLabel("User ID:"));
 		idPanel.add(id);
 		//name field
 		name = new JTextField(15);
 		JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		namePanel.setOpaque(false);
 		namePanel.add(new JLabel("User Name:"));
 		namePanel.add(name);
 		//pass
 		password = new JPasswordField(15);
 		JPanel passPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		passPanel.setOpaque(false);
 		passPanel.add(new JLabel("Password:"));
 		passPanel.add(password);
 		//confirm
 		passConfirm = new JPasswordField(15);
 		JPanel conPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		conPanel.setOpaque(false);
 		conPanel.add(new JLabel("Confirm Password:"));
 		conPanel.add(passConfirm);
 		//upload
@@ -118,17 +126,32 @@ public class RegisterPage extends JPanel {
 			}
 			
 		});
+		//back
+		back = new JButton("Back");
+		back.setPreferredSize(new Dimension(100, back.getPreferredSize().height));
+		back.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				client.ui.setPage(client.ui.login = new LoginPage(client));
+			}
+			
+		});
 		//join together
 		JPanel infoPanel = new JPanel(new GridLayout(5, 1));
+		infoPanel.setOpaque(false);
 		infoPanel.add(titlePanel);
 		infoPanel.add(idPanel);
 		infoPanel.add(namePanel);
 		infoPanel.add(passPanel);
 		infoPanel.add(conPanel);
 		JPanel buttonPanel = new JPanel(new FlowLayout()), imagePanel = new JPanel(new FlowLayout());
+		buttonPanel.setOpaque(false);
+		imagePanel.setOpaque(false);
 		imagePanel.add(image);
 		imagePanel.add(upload);
 		buttonPanel.add(imagePanel);
+		buttonPanel.add(back);
 		buttonPanel.add(register);
 		this.setLayout(new GridLayout(2, 1));
 		this.add(infoPanel);

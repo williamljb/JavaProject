@@ -16,11 +16,13 @@ public class UserPage extends JPanel {
 	boolean shouldBack;
 
 	public UserPage(Client cli, final String userID, final boolean shouldBack) {
+		this.setOpaque(false);
 		client = cli;
 		this.userID = userID;
 		this.shouldBack = shouldBack;
 		//info
 		JPanel display = new JPanel(new BorderLayout());
+		display.setOpaque(false);
 		display.setPreferredSize(new Dimension(UIDisplay.WIDTH, (UIDisplay.HEIGHT - 150) / 6));
 		final User curTalked = client.getUserById(userID);
 		JLabel image = new JLabel(new ImageIcon(client.getUserIcon(curTalked.id).
@@ -30,6 +32,7 @@ public class UserPage extends JPanel {
 		JLabel nameLabel = new JLabel(userName);
 		nameLabel.setFont(new Font("Dialog", 1, 15));
 		JPanel centerPanel = new JPanel(new GridLayout(2, 1));
+		centerPanel.setOpaque(false);
 		centerPanel.add(nameLabel);
 		centerPanel.add(new JLabel(userID));
 		display.add("Center", centerPanel);
@@ -38,6 +41,7 @@ public class UserPage extends JPanel {
 		back = new JButton("back");
 		operate = new JButton(client.isFriend(userID) ? "Delete Friend" : "Send Request");
 		JPanel buttonPanel = new JPanel(new GridLayout(3, 1));
+		buttonPanel.setOpaque(false);
 		buttonPanel.add(send);
 		buttonPanel.add(operate);
 		buttonPanel.add(back);

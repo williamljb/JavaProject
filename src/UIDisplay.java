@@ -1,4 +1,5 @@
 import java.awt.event.*;
+import java.io.File;
 
 import javax.swing.*;
 
@@ -33,6 +34,8 @@ public class UIDisplay {
 				client.logout();
 			}
 		});
+	    //mainFrame.add(imgLabel);
+	    //mainFrame.pack();
 		this.setPage(login = new LoginPage(this.client));
 	}
 
@@ -48,6 +51,13 @@ public class UIDisplay {
 
 	void displayPage(JPanel page) {
 		this.mainFrame.setLayout(null);
+		
+	    ImageIcon img = new ImageIcon("resources" + File.separator + "background.jpg"); 
+	    JLabel imgLabel = new JLabel(img);  
+	    mainFrame.getLayeredPane().add(imgLabel, new Integer(Integer.MIN_VALUE));
+	    imgLabel.setBounds(0,0,img.getIconWidth(), img.getIconHeight()); 
+	    ((JPanel)mainFrame.getContentPane()).setOpaque(false);
+	    
 		this.mainFrame.add(page);
 		this.mainFrame.setSize(WIDTH, HEIGHT);
 		this.mainFrame.setVisible(true);

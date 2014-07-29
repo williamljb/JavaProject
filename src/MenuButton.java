@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 
 import javax.swing.*;
 
@@ -9,6 +10,7 @@ public class MenuButton extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	final static String SEP = File.separator;
 	
 	Client client;
 	JButton mainButton = new JButton(), friendButton = new JButton(), 
@@ -19,25 +21,25 @@ public class MenuButton extends JPanel {
 		this.setLayout(new FlowLayout());
 		this.setPreferredSize(new Dimension(UIDisplay.WIDTH, 150));
 		//main
-		setButton("resources/icons/main.png", mainButton, i == 0);
+		setButton("resources"+SEP+"icons"+SEP+"main.png", mainButton, i == 0);
 		mainButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {client.ui.setPage(new MainPage(client));}
 		});
 		//friend
-		setButton("resources/icons/friend.png", friendButton, i == 1);
+		setButton("resources"+SEP+"icons"+SEP+"friend.png", friendButton, i == 1);
 		friendButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {client.ui.setPage(client.ui.friendPage = new FriendPage(client));}
 		});
 		//discover
-		setButton("resources/icons/discover.png", discoverButton, i == 2);
+		setButton("resources"+SEP+"icons"+SEP+"discover.png", discoverButton, i == 2);
 		discoverButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {client.ui.setPage(client.ui.discoverPage = new DiscoverPage(client));}
 		});
 		//my
-		setButton("resources/icons/my.png", myButton, i == 3);
+		setButton("resources"+SEP+"icons"+SEP+"my.png", myButton, i == 3);
 		myButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {client.ui.setPage(client.ui.myPage = new MyPage(client));}
@@ -48,6 +50,7 @@ public class MenuButton extends JPanel {
 		this.add(discoverButton);
 		this.add(myButton);
 		this.setVisible(true);
+		this.setOpaque(false);
 	}
 
 	private void setButton(String path, JButton button, boolean b) {
