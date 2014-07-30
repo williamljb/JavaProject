@@ -20,6 +20,7 @@ public class ImageReceiver implements Runnable {
 
     public void run() {
         try {
+        	System.out.println("image receiver 23 " + this.receiveAddress);
             server = new ServerSocket(33457);
             Thread th = new Thread(new Runnable() {
                 public void run() {
@@ -49,6 +50,7 @@ public class ImageReceiver implements Runnable {
         } finally {
             if (server != null)
 				try {
+					System.out.println("image receiver 53 close");
 					server.close();
 				} catch (IOException e) {
 					e.printStackTrace();

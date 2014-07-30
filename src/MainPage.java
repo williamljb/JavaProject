@@ -37,12 +37,12 @@ public class MainPage extends JPanel {
 			image.setOpaque(false);
 			String userName = client.getUserName(curTalked);
 			lastSentence = client.getConversation(client.getCurUser().id, curTalked.id);
-			int tmp = TalkPage.isHashCode(lastSentence.substring(1));
+			int tmp = TalkPage.isHashCode(lastSentence.substring(1 + 18));
 			if (tmp == 1)
-				lastSentence = lastSentence.charAt(0) + "[image]";
+				lastSentence = lastSentence.substring(0, 19) + "[image]";
 			else
 				if (tmp == 2)
-					lastSentence = lastSentence.charAt(0) + "[sound]";
+					lastSentence = lastSentence.substring(0, 19) + "[sound]";
 			if (lastSentence.startsWith("0"))
 				lastSentence = "Me : " + lastSentence.substring(1);
 			else

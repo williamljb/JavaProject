@@ -84,6 +84,12 @@ public class UserPage extends JPanel {
 				}
 				else
 				{
+					if (userID.equals(client.getCurUser().id))
+					{
+						JOptionPane.showMessageDialog(client.ui.mainFrame, "You cannot add yourself!",
+								"error", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 					client.sendFriendRequestTo(userID);
 					JOptionPane.showMessageDialog(client.ui.mainFrame, "Request sent. Please wait for reply",
 							"info", JOptionPane.INFORMATION_MESSAGE);

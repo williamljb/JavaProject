@@ -34,7 +34,9 @@ public class Communicator {
 		
 		Communicator.savePic(imagePath, "database"+SEP + id + ".jpg");
 		ImageSender test = new ImageSender("database"+SEP + id + ".jpg");
-    	new Thread(test).start();
+    	Thread thread = new Thread(test);
+    	thread.start();
+    	thread.join();
     	
 		return -1;
 	}
@@ -134,10 +136,12 @@ public class Communicator {
 		String ret = in.readLine();
 		if (ret.charAt(0) == '1')
 			return 1;
-		System.out.println("communicator 114");
+		System.out.println("communicator 137");
 		Communicator.savePic(imagePath, "database"+SEP + id + ".jpg");
 		ImageSender test = new ImageSender("database"+SEP + id + ".jpg");
-    	new Thread(test).start();
+    	Thread thread = new Thread(test);
+    	thread.start();
+    	thread.join();
     	
 		return -1;
 	}
@@ -231,7 +235,9 @@ public class Communicator {
 		if (TalkPage.isHashCode(text) != 0)
 		{
 			ImageSender test = new ImageSender("database" + File.separator + text);
-	    	new Thread(test).start();
+	    	Thread thread = new Thread(test);
+	    	thread.start();
+	    	thread.join();
 		}
 	}
 

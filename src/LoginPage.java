@@ -77,22 +77,23 @@ public class LoginPage extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int ret = 4;
+				int ret = 5;
 				String info = "";
 				if (String.valueOf(password.getPassword()).equals(""))
 					ret = 2;
 				if (idInput.getText().equals("") || idInput.getText().indexOf(' ') != -1)
 				{
 					info = "ID cannot contain spaces or be empty!";
-					ret = 3;
+					ret = 4;
 				}
-				if (ret == 4)
+				if (ret == 5)
 					ret = client.tryLogin(idInput.getText(), String.valueOf(password.getPassword()));
 				switch (ret)
 				{
 				case 0:info = "Server Not Found!";break;
 				case 1:info = "No Such ID!";break;
 				case 2:info = "Incorrect Password!";break;
+				case 3:info = "You have already login-ed in other places!";break;
 				}
 				if (ret != -1)
 				{

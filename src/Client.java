@@ -1,3 +1,5 @@
+import static java.lang.System.out;
+
 import java.awt.*;
 import java.io.*;
 import java.util.*;
@@ -43,7 +45,10 @@ public class Client {
 	}
 
 	public ImageIcon getLastUserIcon() {
-		return new ImageIcon("database"+SEP+"record"+SEP+"LastUser.jpg");
+		if (new File("database"+SEP+"record"+SEP+"LastUser.jpg").exists())
+			return new ImageIcon("database"+SEP+"record"+SEP+"LastUser.jpg");
+		else
+			return Client.getDefaultUserIcon();
 	}
 
 	public String getLastUserID() {
@@ -326,6 +331,19 @@ public class Client {
 	}
 
 	public void sendMessage(String userID, String text) {
+		Calendar cal = new GregorianCalendar();
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		int miniute = cal.get(Calendar.MINUTE);
+		String add = String.valueOf(miniute); if (miniute < 10) add = "0" + add;
+		text = ":" + add + "]" + text;
+		add = String.valueOf(hour); if (hour < 10) add = "0" + add;
+		text = " " + add + text;
+		int tmp = cal.get(Calendar.DATE); add = String.valueOf(tmp); if(tmp < 10) add = "0" + add;
+		text = "-" + add + text;
+		tmp = cal.get(Calendar.MONTH); add = String.valueOf(tmp); if(tmp < 10) add = "0" + add;
+		text = "-" + add + text;
+		tmp = cal.get(Calendar.YEAR); add = String.valueOf(tmp);
+		text = "[" + add + text;
 		try {
 			this.communicator.sendMessage(curUser.id, userID, text);
 		} catch (Exception e) {

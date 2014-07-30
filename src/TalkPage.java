@@ -98,15 +98,19 @@ public class TalkPage extends JPanel {
 			JLabel image = new JLabel(new ImageIcon(client.getUserIcon
 					(me ? client.getCurUser().id : userID).
 					getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-			
+			String time = sentence.substring(0, 18);
+			sentence = sentence.substring(18);
 			int tmp = isHashCode(sentence);
 			if (tmp == 1)
 			{
 				--end;
 				final ImageIcon icon = new ImageIcon("database" + File.separator + sentence);
-				JLabel label = new JLabel(new ImageIcon(icon.getImage()
-						.getScaledInstance(100*icon.getIconWidth()/icon.getIconHeight(), 100, Image.SCALE_SMOOTH)));
-				label.setPreferredSize(new Dimension(100, 100));
+				JLabel label = new JLabel(time, new ImageIcon(icon.getImage()
+						.getScaledInstance(100*icon.getIconWidth()/icon.getIconHeight(), 100, Image.SCALE_SMOOTH)),
+						JLabel.CENTER);
+				label.setPreferredSize(new Dimension(150, 130));
+				label.setVerticalTextPosition(JLabel.TOP);
+				label.setHorizontalTextPosition(JLabel.CENTER);
 
 				label.setOpaque(true);
 				label.setBorder(BorderFactory.createRaisedBevelBorder());
@@ -138,9 +142,11 @@ public class TalkPage extends JPanel {
 				if (tmp == 2)
 				{
 					final ImageIcon icon = new ImageIcon("resources" + File.separator + "a.png");
-					JLabel label = new JLabel(new ImageIcon(icon.getImage().getScaledInstance
-							(30, 30, Image.SCALE_SMOOTH)));
-					label.setPreferredSize(new Dimension(50, 50));
+					JLabel label = new JLabel(time, new ImageIcon(icon.getImage().getScaledInstance
+							(30, 30, Image.SCALE_SMOOTH)), JLabel.CENTER);
+					label.setPreferredSize(new Dimension(150, 60));
+					label.setVerticalTextPosition(JLabel.TOP);
+					label.setHorizontalTextPosition(JLabel.CENTER);
 					label.setHorizontalAlignment(JLabel.CENTER);
 					label.setVerticalAlignment(JLabel.CENTER);
 					label.setOpaque(true);
@@ -168,7 +174,7 @@ public class TalkPage extends JPanel {
 				}
 				else
 			{
-				JTextArea say = new JTextArea(sentence);
+				JTextArea say = new JTextArea(time + "\n" + sentence);
 				if (sentence.length() > 30)
 				{
 					say.setLineWrap(true);
