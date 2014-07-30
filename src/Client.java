@@ -83,7 +83,7 @@ public class Client {
 					}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		//System.out.println("@Client.java, line 46 : " + curUser.id);
 		return ret;
@@ -95,7 +95,7 @@ public class Client {
 		try {
 			ret = this.communicator.create(id, name, password, imagePath);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		if (ret == -1)
 			curUser = new User(id, name, password, "image");
@@ -128,7 +128,7 @@ public class Client {
 		try {
 			this.communicator.getUser(this.talkingQueue.get(this.talkingQueue.size() - 1 - order), user);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return user;
 	}
@@ -171,7 +171,7 @@ public class Client {
 			if (ret == -1)
 				this.communicator.getUser(id, curUser);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return ret;
 	}
@@ -186,7 +186,7 @@ public class Client {
 		try {
 			ret = this.communicator.idExists(userID);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return ret;
 	}
@@ -195,7 +195,7 @@ public class Client {
 		try {
 			this.communicator.sendRequest(this.curUser.id, userID);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -204,7 +204,7 @@ public class Client {
 		try {
 			this.communicator.friend(friends, curUser.id);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		Collections.sort(friends);
 		ids = friends.toArray(new String[friends.size()]);
@@ -216,7 +216,7 @@ public class Client {
 		try {
 			this.communicator.request(set, curUser.id);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		requestids = set.toArray(new String[set.size()]);
 		return set.size();
@@ -228,7 +228,7 @@ public class Client {
 			this.communicator.getUser(requestids[i], user);
 			//System.out.println(user.id + " " + user.name);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return user;
 	}
@@ -237,7 +237,7 @@ public class Client {
 		try {
 			this.communicator.acceptRequest(userID, curUser.id);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	
@@ -245,7 +245,7 @@ public class Client {
 		try {
 			this.communicator.declineRequest(userID, curUser.id);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -255,7 +255,7 @@ public class Client {
 			this.communicator.getUser(ids[i], user);
 			//System.out.println(user.id + " " + user.name);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return user;
 	}
@@ -265,7 +265,7 @@ public class Client {
 		try {
 			this.communicator.getUser(userID, user);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return user;
 	}
@@ -283,7 +283,7 @@ public class Client {
 			this.communicator.deleteFriend(curUser.id, userID);
 			//System.out.println("ok");
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -308,7 +308,7 @@ public class Client {
 			}
 			in.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return records.size();
 	}
@@ -324,7 +324,7 @@ public class Client {
 			tmp.write(this.LastUserID + "\n");
 			tmp.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -345,7 +345,7 @@ public class Client {
 		try {
 			this.communicator.sendMessage(curUser.id, userID, text);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		addMessage(curUser.id, userID, text, true);
 		//addMessage(userID, curUser.id, text, false);
@@ -358,7 +358,7 @@ public class Client {
 			fw.write((aToB ? 0 : 1) + text + "\n");
 			fw.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -375,7 +375,7 @@ public class Client {
 				ans = buffer.intern();
 			in.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return ans;
 	}
@@ -399,7 +399,7 @@ public class Client {
 			if (reflush != -2)
 				return reflush;
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return Integer.parseInt(ans);
 	}
@@ -417,7 +417,7 @@ public class Client {
 				fw.write(s + "\n");
 			fw.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return true;
 	}
@@ -478,9 +478,9 @@ public class Client {
 				fw.write(s + "\n");
 			fw.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 

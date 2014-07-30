@@ -17,9 +17,9 @@ public class Communicator {
 			out = new PrintWriter(socket.getOutputStream());
 		} catch (UnknownHostException e) {
 			this.serverNotFound = true;
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -111,19 +111,19 @@ public class Communicator {
                 fos.flush();
             }
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		} finally {
 			if (fos != null)
 				try {
 					fos.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
             if (dis != null)
 				try {
 					dis.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 		}
     }
@@ -237,7 +237,7 @@ public class Communicator {
 			ImageSender test = new ImageSender("database" + File.separator + text.substring(18));
 	    	Thread thread = new Thread(test);
 	    	thread.start();
-	    	//thread.join();
+	    	thread.join();
 		}
 	}
 

@@ -34,7 +34,7 @@ public class ImageReceiver implements Runnable {
                             try {
 								server.close();
 							} catch (IOException e1) {
-								e1.printStackTrace();
+								//e1.printStackTrace();
 							}
                             break;
                         }
@@ -46,14 +46,14 @@ public class ImageReceiver implements Runnable {
             th.run(); 
             th.join();
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             if (server != null)
 				try {
 					System.out.println("image receiver 53 close");
 					server.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
         }
     }
