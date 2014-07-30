@@ -430,6 +430,8 @@ public class Client {
 			{
 				flag = true;
 				this.unreadMessage.add(s);
+				if (ui.top > 0 && ui.stack[ui.top - 1] instanceof TalkPage)
+					this.unreadMessage.remove(((TalkPage)ui.stack[ui.top - 1]).ID);
 			}
 		if (ui.top > 0 && ui.stack[ui.top - 1] instanceof FriendPage)
 		{
