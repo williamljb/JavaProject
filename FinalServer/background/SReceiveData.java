@@ -5,7 +5,11 @@ import java.util.Scanner;
 import java.io.File;
 import java.net.*;
 
-//import javax.swing.ImageIcon;
+/**
+ * @author Srhjerry
+ * @version 2014.07.30
+ * 
+ * */
 
 public class SReceiveData{
 	
@@ -62,7 +66,7 @@ public class SReceiveData{
 				this.image = in.next();
 				break;
 			default:
-				System.out.println("Something haven't dealt.");
+				//System.out.println("Something haven't dealt.");
 			}
 			
 		}
@@ -94,7 +98,7 @@ public class SReceiveData{
 				if(log.LogIn(this.id, clientSocket).equals("-1"))
 					return "-1";
 				else
-					return "2";
+					return "3";
 				}
 			else
 				return "2";
@@ -102,7 +106,7 @@ public class SReceiveData{
 		
 	}else if(this.command.equals("GETUSER")){
 		String tmp;
-		System.out.println("GetUserCommand 97@SReceiveData.java");
+		//System.out.println("GetUserCommand 97@SReceiveData.java");
 		this.id = in.next();
 		in.close();
 		SearchMethods findUser = new SearchMethods();
@@ -111,7 +115,14 @@ public class SReceiveData{
 			return tmp;
 		else{
 			ImageSender test = new ImageSender("data" + File.separator + this.id + File.separator + this.id + ".jpg", clientSocket);
-	    	new Thread(test).start();
+	    	Thread thread = new Thread(test);
+	    	thread.start();
+	    	/*try {
+				thread.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}*/
 	    	return tmp;
 		}
 	}else if(this.command.equals("EDIT")){
@@ -146,7 +157,7 @@ public class SReceiveData{
 				this.image = in.next();
 				break;
 			default:
-				System.out.println("Something haven't dealt.");
+				//System.out.println("Something haven't dealt.");
 			}
 			
 		}
@@ -162,7 +173,7 @@ public class SReceiveData{
 		return new LogMethods().LogOut(this.id);
 		
 	}else if(this.command.equals("IDEXISTS")){
-		System.out.println("156@SReceiveData");
+		//System.out.println("176@SReceiveData");
 		this.id = in.next();
 		in.close();
 		System.out.println(this.id + " IDEXISTS@161.SReceiveData");
@@ -210,11 +221,11 @@ public class SReceiveData{
 		String text = source.substring(source.indexOf(' ') + 1);
 		text = text.substring(text.indexOf(' ') + 1);
 		text = text.substring(text.indexOf(' ') + 1);
-		System.out.println(text + "@201.SReceiveData");
+		//System.out.println(text + "@201.SReceiveData");
 		in.close();
 		return MessageMethods.SendMessage(from, to, text);
 	}else if(this.command.equals("DOWNLOAD")){
-		System.out.println(this.command + " command @205.SReceiveData.java");
+		//System.out.println(this.command + " command @205.SReceiveData.java");
 		String from = in.next();
 		String to = in.next();
 		in.close();

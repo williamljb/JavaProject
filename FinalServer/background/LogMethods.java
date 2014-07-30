@@ -1,8 +1,13 @@
 package background;
 
-//import java.io.*;
 import java.net.Socket;
 import java.util.TreeMap;
+
+/**
+ * @author Srhjerry
+ * @version 2014.07.30
+ * 
+ * */
 
 public class LogMethods {
 	
@@ -26,7 +31,7 @@ public class LogMethods {
 			System.out.println("Error: "+e);
 		}*/
 		if(logList.containsKey(ID))
-			return "1";
+			return "1";//ID already logged in
 		logList.put(ID, cSocket.getInetAddress().getHostAddress());
 		System.out.println(logList + " 30@LogMethods.java");
 		return "-1";
