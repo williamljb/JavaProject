@@ -232,12 +232,12 @@ public class Communicator {
 		out.flush();
 		//System.out.println("communicator 199 : " + text);
 		in.readLine();
-		if (TalkPage.isHashCode(text) != 0)
+		if (TalkPage.isHashCode(text.substring(18)) != 0)
 		{
-			ImageSender test = new ImageSender("database" + File.separator + text);
+			ImageSender test = new ImageSender("database" + File.separator + text.substring(18));
 	    	Thread thread = new Thread(test);
 	    	thread.start();
-	    	thread.join();
+	    	//thread.join();
 		}
 	}
 
@@ -256,9 +256,9 @@ public class Communicator {
 			buffer = in.readLine();
 			ans = ans + buffer + "\n";
 			b[i] = "";
-			if (TalkPage.isHashCode(buffer.substring(1)) != 0)
+			if (TalkPage.isHashCode(buffer.substring(1 + 18)) != 0)
 			{
-				b[i] = new String(buffer.substring(1).intern());
+				b[i] = new String(buffer.substring(1 + 18).intern());
 				//System.out.println("file : " + b[i]);
 			}
 		}
@@ -297,9 +297,9 @@ public class Communicator {
 			buffer = in.readLine();
 			ans = ans + buffer + "\n";
 			b[i] = "";
-			if (TalkPage.isHashCode(buffer.substring(1)) != 0)
+			if (TalkPage.isHashCode(buffer.substring(1 + 18)) != 0)
 			{
-				b[i] = new String(buffer.substring(1).intern());
+				b[i] = new String(buffer.substring(1 + 18).intern());
 				//System.out.println("file : " + b[i]);
 			}
 		}

@@ -1,5 +1,3 @@
-import static java.lang.System.out;
-
 import java.awt.*;
 import java.io.*;
 import java.util.*;
